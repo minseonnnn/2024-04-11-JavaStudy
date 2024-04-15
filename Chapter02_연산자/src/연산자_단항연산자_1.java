@@ -78,6 +78,29 @@ public class 연산자_단항연산자_1 {
 		/*
 		 * int a=10; int b= ++a + ++a + a++; System.out.println("a="+a+",b="+b);
 		 */
+		int a=10;
+		a++;
+		a++;
+		a++;
+		System.out.println("a="+a); //3번 증가(1씩) 
+		
+		int b=10;
+		b--; // b-1 = 9
+		b--; // b-1 = 8
+		b--; // b-1 = 7
+		System.out.println("b="+b);
+		
+		int c=10;
+		++c;
+		++c;
+		++c;
+		System.out.println("c="+c);
+		
+		int d=10;
+		--d;
+		--d;
+		--d;
+		System.out.println("d="+d);
 
          
 	}
