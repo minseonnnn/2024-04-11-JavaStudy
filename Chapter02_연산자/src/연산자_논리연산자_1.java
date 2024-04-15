@@ -39,7 +39,10 @@ public class 연산자_논리연산자_1 {
         int x=10;
         int y=9;
         
-        boolean bCheck= x!=y && ++y==x;
+        boolean bCheck= x==y && ++y==x;
+        //              ---- false
+        //                   ||
+        //              ---- true => 효율적인 연산 
         System.out.println("bCheck="+bCheck);
         System.out.println("x="+x);
         System.out.println("y="+y);
