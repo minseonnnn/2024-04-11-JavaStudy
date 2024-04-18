@@ -7,10 +7,10 @@ public class 문제_4 {
 		// TODO Auto-generated method stub
 		for(int i=5;i<=50;i+=5)
 		{
-			if(i!=50)
-				System.out.print(i+",");
-			else
-				System.out.print(i);
+			//if(i!=50)
+				System.out.print(i+"\t"); //tab 일정 간격
+			//else
+				//System.out.print(i);
 		}
 
 	}

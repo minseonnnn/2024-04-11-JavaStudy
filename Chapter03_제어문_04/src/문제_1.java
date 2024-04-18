@@ -55,9 +55,20 @@ public class 문제_1 {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Scanner scan=new Scanner(System.in);
-		System.out.print("0~100 사이 정수 입력:");
-		int score=scan.nextInt();
-		switch(score/10)
+		int score=0;
+		while(true)
+		{
+		  System.out.print("0~100 사이 정수 입력:");
+		  score=scan.nextInt();
+		  if(score<0 || score>100)
+		  {
+			  System.out.println("다시 입력하세요");
+			  continue;
+		  }
+		  break;
+		} 
+		  
+		  switch(score/10)
 		{
 		/*
 		 * case 100: case 99: case 98: case 97: case 96: case 95: case 94: case 93: case
