@@ -7,10 +7,10 @@ public class 문제_5 {
 		// TODO Auto-generated method stub
 		for(char c='B';c<='N';c+=2)
 		{
-			if(c!='N')
-				System.out.print(c+",");
-			else
-				System.out.print(c);
+			//if(c!='N')
+				System.out.print(c+"\t");
+			//else
+				//System.out.print(c);
 		}
 
 	}
