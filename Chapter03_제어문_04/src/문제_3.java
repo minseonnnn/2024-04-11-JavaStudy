@@ -34,7 +34,7 @@ public class 문제_3 {
 		for(int i=2;i<=100;i+=2)
 		{
 			sum+=i;
-			System.out.println("i="+i+",sum="+sum);
+			
 		}
 		System.out.print("2+4+...100의 합:"+sum);
 		/*
