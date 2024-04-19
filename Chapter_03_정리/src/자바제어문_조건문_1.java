@@ -87,11 +87,7 @@ public class 자바제어문_조건문_1 {
 				System.out.println("금액이 부족합니다:"+(1200-pay));
 			}
 		}
-		else	
-		{
-			System.out.println("동전이 모자랍니다..");
-			change=pay-1200;
-		}
+		
 		//////////// 잔돈 계산
 		if(change>0)
 		{
