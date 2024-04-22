@@ -23,9 +23,8 @@ public class 문제_3 {
 		    }
 		    else sum += i;
 		    i++;
-		}
-
-
+		   }
+		System.out.println("sum="+sum);
 	}
 
 }
