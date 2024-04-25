@@ -63,6 +63,12 @@ public class 문제_1 {
 		System.out.println(n3.length);
 		//int n4[3]=new int[3];
 		//  ----- 배열로 데이터를 저장 []
+		int[] score= {12,56,54,68,87};
+		for(int i=0;i<5;i++)
+		{
+			System.out.print(score[i]);
+		}
+	
 
 	}
 
