@@ -6,7 +6,7 @@ public class 문제_5 {
 	static String upper(String str)
     {
 		String res="";
-		for(int i=0;i<=str.length();i++)
+		for(int i=0;i<str.length();i++)
 		{
 			char c=str.charAt(i);
 			if(c>='A' && c<='Z')
@@ -22,9 +22,9 @@ public class 문제_5 {
 				res+=c;
 			}
 		}
-    	//return str.toUpperCase();
+		//return str.toUpperCase();
 		return res;
-    }
+	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
         Scanner scan=new Scanner(System.in);
