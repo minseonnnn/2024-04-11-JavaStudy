@@ -12,6 +12,7 @@ public class 달력만들기_전역변수 {
     }
     static void getWeek()
     {
+    	// 2. 요일 구하기 => 사용자 정의 / 라이브러리
     	Calendar cal=Calendar.getInstance(); // 싱글턴 
 		// Calendar 클래스 메모리 할당 
 		// 추상클래스
@@ -47,7 +48,8 @@ public class 달력만들기_전역변수 {
 			}
 			System.out.printf("%2d\t",i);
 			week++;
-			if(week>6) {
+			if(week>6) 
+			{
 				System.out.println();
 				week=0;
 			}

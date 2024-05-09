@@ -87,8 +87,9 @@ public class 달력만들기_절차적언어 {
 				}
 			}
 			System.out.printf("%2d\t",i);
-			week++;
-			if(week>6) {
+			week++;//0~6
+			if(week>6) 
+			{
 				System.out.println();
 				week=0;
 			}
