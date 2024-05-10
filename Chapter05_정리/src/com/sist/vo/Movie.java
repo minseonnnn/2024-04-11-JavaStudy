@@ -1,6 +1,6 @@
 package com.sist.vo;
 
-import lombok.Data;
+import lombok.Data; //getter / setter 만드는 라이브러리
 
 // 데이터형 선언 => 정보를 저장 1개에 대한 정보 
 /*
@@ -11,9 +11,10 @@ import lombok.Data;
  *   팀 로빈스(앤디 듀프레인), 모건 프리먼(엘리스 보이드 레드 레딩)|
  *   2016 .02.24 재개봉, 1995 .01.28 개봉|
  *   15세 관람가|
- *   프랭크 다라본트
+ *   프랭크 다라본트\n
  */
 @Data
+//lombok => getter/setter , 생성자와 관련된 내용 생성
 public class Movie {
    private String rank;
    private String title;
@@ -26,5 +27,6 @@ public class Movie {
    // private => Movie 클래스 영역에서만 사용이 가능 => 다른 클래스에서 연결이 안된다 => 데이터 손실이 없게 ... 
    // 각변수에 기능을 부여 => 다른 클래스에서도 사용이 가능하게 만든다 (캡슐화)
    // ---- 읽기/쓰기 => getter/setter
+   // public Movie(){}
    
 }
