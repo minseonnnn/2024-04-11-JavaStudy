@@ -58,16 +58,20 @@ package com.sist.main;
  *                 }
  *              }
  *              *** 자동 로그인 (Cookie)
- *            = 생성자 ===========> 가장 많이 사용 ===> 인스턴스       
+ *            = 생성자 ===========> 가장 많이 사용 ===> 인스턴스 => 166page        
  *              1) 특징
  *                 => 모든 클래스는 생성자가 1개 이상 존재
  *                              ---------------- 없는 경우에는 컴파일러가 자동으로 1개 추가
  *                                                         -------------------- 디폴트 생성자
  *                                                         디폴트 생성자 => 매개변수가 없는 생성자
  *                 => 클래스명과 동일
- *                 => 리턴형이 없다
+ *                 => 리턴형이 없다 (void 사용이 안됨)
+ *                 => 객체 생성시 호출 => new 생성자()
  *                 => 같은 이름으로 여러개의 생성자를 만들 수 있다  
  *                    --------------------- 오버로딩 (중복 메소드 정의)
+ *                    => 같은 이름으로 여러개를 만드는 경우
+ *                       1. 매개변수의 갯수 , 데이터형이 다른 경우
+ *                       2. 리턴형, 접근 지정어는 관계없다
  *                 => 생성자는 단독으로 호출이 불가능 => 호출시 new 생성자()
  *                                                  -----------     
  *              2) 역할
@@ -98,12 +102,85 @@ package com.sist.main;
  *                      aa.aaa(),aa.a
  *                      b => static은 static메소드, static변수만 호출이 가능
  *                   } => 정적
- *                }                                                                                                                                           
+ *                }                
+ *                
+ *                                                                                                                                           
  */
+class Student
+{
+	private String name;
+	private String sex;
+	private int age;
+	
+	public Student()
+	{
+		name="홍길동";
+		sex="남자";
+		age=20;
+	}
+	// 사용자가 입력받은 값으로 초기화
+	public Student(String n,String s,int a)
+	{
+	    name=n;
+	    sex=s;
+	    age=a;
+	}
+	public Student(String n)
+	{
+		// 생성자 호출 => this()
+		this(); // 첫번째 줄에 사용해야한다 => Student()
+		name=n;
+	}
+	public Student(String s,int a)
+	{
+	    this("박문수",s,a); // Student(String n,String s,int a)	
+	}
+	
+	public void print()
+	{
+		System.out.println("이름:"+name);
+		System.out.println("성별:"+sex);
+		System.err.println("나이:"+age);
+	}
+}
+class Member
+{
+	// 생성자 ==> default 생성자는 존재하지 않는다
+	public Member(String name) // 생성자 
+	{
+		System.out.println("이름:"+name);
+	}
+}
+class Sawon
+{
+	// public Sawon(){} => 컴파일러가 자동으로 추가 => 생성자가 존재하지 않는 경우에 추가 
+}
+class Emp
+{
+	private String name;
+	private String dept;
+	
+	
+}
 public class 클래스_114 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		/*Student s1=new Student();
+		s1.print();
+		
+		System.out.println("========= 사용자 입력을 받아서 초기화 =========");
+		Student s2=new Student("심청이","여자",20);
+		s2.print();*/
+		/*Student s1=new Student("박문수");
+		s1.print();
+		Student s2=new Student("여자",30);
+		s2.print();*/
+		//Member m=new Member("aa");
+		Sawon s=new Sawon();
+		// => 생성자는 여러개 만들 수 있다 , 없는 경우에만 생성자가 추가 (디폴트 생성자)
+		// 클래스안에서 생성자 호출시에는 this()를 이용한다 
+		// this() 반드시 생성자안에서만 호출 => 첫번째줄에서 호출 => 한번만 사용이 가능 => 한두번정도 나온다 
 
 	}
 
