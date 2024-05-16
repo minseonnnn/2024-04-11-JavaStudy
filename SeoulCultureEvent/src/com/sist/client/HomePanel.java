@@ -7,7 +7,7 @@ public class HomePanel extends JPanel{
    {
 	   
 	   setBackground(Color.white);
-	   
+
    }
    
 }
