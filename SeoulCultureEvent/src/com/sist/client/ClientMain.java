@@ -24,6 +24,7 @@ public class ClientMain extends JFrame implements ActionListener{
     	
     	mp.b1.addActionListener(this);// b1버튼을 클릭하면 => actionPeformed를 호출
     	mp.b2.addActionListener(this);
+    	mp.b3.addActionListener(this);
     	mp.b6.addActionListener(this);
     }
 	public static void main(String[] args) {
@@ -44,6 +45,10 @@ public class ClientMain extends JFrame implements ActionListener{
 		else if(mp.b2==e.getSource()) // 메뉴 2번 버튼 클릭
 		{
 			cp.card.show(cp, "FIND");
+		}
+		else if(mp.b3==e.getSource()) 
+		{
+			cp.card.show(cp, "NEWS");
 		}
 		else if(mp.b6==e.getSource())
 		{
