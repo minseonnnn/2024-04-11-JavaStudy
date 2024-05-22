@@ -35,10 +35,6 @@ public class Login extends JFrame{
 		
 		p.setBounds(10, 90, 290, 35);
 		add(p);
-
-		setSize(350,170);
-
-		setVisible(true);
 	}
 	
 	public static void main(String[] args) {

@@ -50,6 +50,10 @@ public class ClientMain extends JFrame implements ActionListener{
 		{
 			cp.card.show(cp, "NEWS");
 		}
+		else if(mp.b4==e.getSource()) 
+		{
+			cp.card.show(cp, "REVIEW");
+		}
 		else if(mp.b6==e.getSource())
 		{
 			JOptionPane.showMessageDialog(this, "프로그램을 종료합니다");
