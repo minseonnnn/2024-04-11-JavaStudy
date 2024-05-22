@@ -8,6 +8,8 @@ public class ControllerPanel extends JPanel{
    public HomePanel hp=new HomePanel();
    public FindPanel fp=new FindPanel();
    public NewsPanel np=new NewsPanel();
+   public DetailPanel dp=new DetailPanel();
+   
    
    public ControllerPanel()
    {
@@ -15,6 +17,7 @@ public class ControllerPanel extends JPanel{
       add("FIND",fp);
       add("HOME",hp);
       add("NEWS",np);
+      add("REVIEW",dp);
       
    }
 }
