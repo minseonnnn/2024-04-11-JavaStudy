@@ -1,8 +1,7 @@
 package com.sist.main;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
-
-import com.sun.jdi.Method;
 
 /*
  *    프로그램 
