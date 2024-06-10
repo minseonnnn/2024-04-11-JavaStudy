@@ -6,12 +6,12 @@ public class MenuPanel extends JPanel{
     public MenuPanel()
     {
     	setLayout(new GridLayout(1,6,5,5));
-    	// setLayout(new GridLayout(6,1,5,5)); <= 세로로 메뉴 설정시 
-    	homeBtn=new JButton("홈");
-    	findBtn=new JButton("맛집검색");
-    	boardBtn=new JButton("커뮤니티");
-    	chatBtn=new JButton("실시간 채팅");
-    	newsBtn=new JButton("뉴스 검색");
+    	//setLayout(new GridLayout(6,1,5,5));
+    	homeBtn=new JButton("홈"); // 1명
+    	findBtn=new JButton("맛집검색"); // 1명
+    	boardBtn=new JButton("커뮤니티"); // 1명
+    	chatBtn=new JButton("실시간 채팅"); // 2명
+    	newsBtn=new JButton("뉴스 검색"); // 1명
     	exitBtn=new JButton("나가기");
     	
     	add(homeBtn);

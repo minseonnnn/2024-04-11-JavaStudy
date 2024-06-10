@@ -22,8 +22,8 @@ public class LoginPanel extends JPanel{
     	joinBtn=new JButton("회원가입");
     	cancelBtn=new JButton("종료");
     	
-    	// 배치
-    	setLayout(null); // 사용자 정의
+    	// 배치 
+    	setLayout(null); // 사용자 정의 
     	idLa.setBounds(650, 545, 80, 30);
     	tf.setBounds(735, 545, 180, 30);
     	add(idLa);add(tf);
@@ -36,15 +36,15 @@ public class LoginPanel extends JPanel{
     	p.add(loginBtn);
     	p.add(joinBtn);
     	p.add(cancelBtn);
-    	p.setOpaque(false); // 버튼 배경을 투명하게
+    	p.setOpaque(false);
     	p.setBounds(650, 615, 265, 35);
     	add(p);
     }
-
+    
     // 스킨 => 이미지 배경 => 
 	@Override
 	protected void paintComponent(Graphics g) {
-	    g.drawImage(back, 0, 0, getWidth(),getHeight(),this);
+		g.drawImage(back, 0, 0,getWidth(),getHeight(),this);
 	}
     
     

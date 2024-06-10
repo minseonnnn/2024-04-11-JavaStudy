@@ -6,10 +6,11 @@ import java.awt.Color;
 import javax.swing.JPanel;
 
 public class ControllPanel extends JPanel{
-   public CardLayout card=new CardLayout();	
+   CardLayout card=new CardLayout();
+   EmpListPanel ep=new EmpListPanel();
    public ControllPanel()
    {
 	   setLayout(card);
-	   setBackground(Color.LIGHT_GRAY);
+	   add("EP",ep);
    }
 }
