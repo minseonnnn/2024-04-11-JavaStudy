@@ -24,7 +24,7 @@ public class FindPanel extends JPanel{
    	   add(search);
 
 	   String[] col= {"책 제목","저자","출판사","발행일"};
-   	   String[][] row=new String[0][4];
+   	   String[][] row=new String[0][5];
 	   find=new DefaultTableModel(row,col);
    	   table=new JTable(find);
    	   JScrollPane js=new JScrollPane(table);
