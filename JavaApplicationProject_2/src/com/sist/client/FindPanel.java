@@ -18,10 +18,10 @@ public class FindPanel extends JPanel{
 	   setLayout(null); 
 	   
 	   JPanel p=new JPanel();
-	   p.add(searchT);
-	   p.add(search);
-	   p.setBounds(20, 50, 520, 35);
-	   add(p);
+	   searchT.setBounds(30, 50, 400, 30);
+   	   add(searchT);
+   	   search.setBounds(450, 50, 100, 30);
+   	   add(search);
 
 	   String[] col= {"책 제목","저자","출판사","발행일"};
    	   String[][] row=new String[0][4];
