@@ -6,37 +6,36 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 import com.sist.dao.*;
-import com.sist.temp.EmpDAO;
 
 public class ClientMain extends JFrame implements ActionListener{
     CardLayout card=new CardLayout();
-    LoginPanel lp=new LoginPanel();
-    MainPanel mp=new MainPanel();
-    JoinPanel jp=new JoinPanel();
-    FindPanel fp=new FindPanel();
+    LoginPanel loginp=new LoginPanel();
+    MainPanel mainp=new MainPanel();
+    JoinPanel joinp=new JoinPanel();
+    FindPanel findp=new FindPanel();
     PostFindFrame post=new PostFindFrame();// 우편번호 검색 
     public ClientMain()
     {
     	setLayout(card);
-    	add("FIND", fp);
-    	add("LOGIN",lp);
-    	add("MP",mp);
-    	add("JP",jp);
-    	setSize(960, 700);
+    	add("LOGIN",loginp);
+    	add("FP",findp);
+    	add("MP",mainp);
+    	add("JP",joinp);
+    	setSize(960, 780);
     	setResizable(false);
     	setVisible(true);
     	
     	setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+    	//setDefaultCloseOperation(EXIT_ON_CLOSE);
+    	loginp.loginBtn.addActionListener(this);// 로그인 
+    	loginp.joinBtn.addActionListener(this);// 회원가입 
+    	loginp.cancelBtn.addActionListener(this);// 종료
     	
-    	lp.loginBtn.addActionListener(this);// 로그인 
-    	lp.joinBtn.addActionListener(this);// 회원가입 
-    	lp.cancelBtn.addActionListener(this);// 종료
+    	joinp.cancel.addActionListener(this);// 취소
+    	joinp.postFind.addActionListener(this);// 우편번호 검색 
     	
-    	jp.b4.addActionListener(this);// 취소
-    	jp.b2.addActionListener(this);// 우편번호 검색
-
-    	post.b1.addActionListener(this);// 우편번호 검색 버튼
-    	post.b2.addActionListener(this);// 취소
+    	post.b1.addActionListener(this);// 우편 검색 버튼 
+    	post.b2.addActionListener(this);// 취소 
     	post.tf.addActionListener(this);// 우편번호 입력창 
     	
     }
@@ -51,7 +50,7 @@ public class ClientMain extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource()==lp.cancelBtn)
+		if(e.getSource()==loginp.cancelBtn)
 		{
 			dispose();// window메모리 해제 
 			System.exit(0);// 프로그램 종료
@@ -81,7 +80,7 @@ public class ClientMain extends JFrame implements ActionListener{
 			{
 				for(int i=post.model.getRowCount()-1;i>=0;i--)
 				{
-					post.model.removeRow(i);// 데이터 지우기
+					post.model.removeRow(i);
 				}
 				
 				for(ZipcodeVO vo:list)
@@ -91,7 +90,7 @@ public class ClientMain extends JFrame implements ActionListener{
 				}
 			}
 		}
-		else if(e.getSource()==jp.b2)
+		else if(e.getSource()==joinp.postFind)
 		{
 			for(int i=post.model.getRowCount()-1;i>=0;i--)
 			{
@@ -100,32 +99,32 @@ public class ClientMain extends JFrame implements ActionListener{
 			post.tf.setText("");
 			post.setVisible(true);
 		}
-		else if(e.getSource()==jp.b4)
+		else if(e.getSource()==joinp.cancel)
 		{
 			card.show(getContentPane(), "LOGIN");
 		}
-		else if(e.getSource()==lp.joinBtn)
+		else if(e.getSource()==loginp.joinBtn)
 		{
 			card.show(getContentPane(), "JP");
 		}
-		else if(e.getSource()==lp.loginBtn)
+		else if(e.getSource()==loginp.loginBtn)
 		{
 			//1. 입력한 사번 / 이름을 가지고 온다 
 			try
 			{
 				// 유효성 검색 => 오라클 
-				String id=lp.tf.getText();
+				String id=loginp.idField.getText();
 				if(id.length()<1)
 				{
 					JOptionPane.showMessageDialog(this, "아이디를 입력하세요");
-					lp.tf.requestFocus();
+					loginp.idField.requestFocus();
 					return;
 				}
-				String pwd=String.valueOf(lp.pf.getPassword());
+				String pwd=String.valueOf(loginp.pwField.getPassword());
 				if(pwd.length()<1)
 				{
 					JOptionPane.showMessageDialog(this, "비밀번호를 입력하세요");
-					lp.pf.requestFocus();
+					loginp.pwField.requestFocus();
 					return;
 				}
 				
@@ -137,16 +136,16 @@ public class ClientMain extends JFrame implements ActionListener{
 				{
 					// 사번이 없는 경우 
 					JOptionPane.showMessageDialog(this, "아이디가 존재하지 않습니다");
-					lp.tf.setText("");
-					lp.pf.setText("");
-					lp.tf.requestFocus();
+					loginp.idField.setText("");
+					loginp.pwField.setText("");
+					loginp.idField.requestFocus();
 				}
 				else if(result.equals("NOPWD"))
 				{
 					// 이름이 틀린 경우
 					JOptionPane.showMessageDialog(this, "비밀번호가 틀립니다");
-					lp.pf.setText("");
-					lp.pf.requestFocus();
+					loginp.pwField.setText("");
+					loginp.pwField.requestFocus();
 				}
 				else
 				{
