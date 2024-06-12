@@ -45,5 +45,5 @@ public class FindPanel extends JPanel{
 	   p1.setBounds(20, 600, 250, 60);
 	   add(p1);
 	   
-   }
+   }//
 }
