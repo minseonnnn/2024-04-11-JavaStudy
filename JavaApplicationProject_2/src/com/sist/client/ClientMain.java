@@ -11,33 +11,31 @@ import com.sist.dao.*;
 
 public class ClientMain extends JFrame implements ActionListener,MouseListener{
     CardLayout card=new CardLayout();
-    LoginPanel loginp=new LoginPanel();
-    MainPanel mainp=new MainPanel();
-    JoinPanel joinp=new JoinPanel();
-    FindPanel findp=new FindPanel();
+    LoginPanel lp=new LoginPanel();
+    MainPanel mp=new MainPanel();
+    JoinPanel jp=new JoinPanel();
     PostFindFrame post=new PostFindFrame();// 우편번호 검색 
     IdCheckFrame idfrm=new IdCheckFrame();
     public ClientMain()
     {
     	setLayout(card);
-    	add("LOGIN",loginp);
-    	add("FP",findp);
-    	add("MP",mainp);
-    	add("JP",joinp);
-    	setSize(960, 780);
+    	add("LOGIN",lp);
+    	add("MP",mp);
+    	add("JP",jp);
+    	setSize(960, 750);
     	setResizable(false);
     	setVisible(true);
     	
     	setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     	//setDefaultCloseOperation(EXIT_ON_CLOSE);
-    	loginp.loginBtn.addActionListener(this);// 로그인 
-    	loginp.joinBtn.addActionListener(this);// 회원가입 
-    	loginp.cancelBtn.addActionListener(this);// 종료
+    	lp.loginBtn.addActionListener(this);// 로그인 
+    	lp.joinBtn.addActionListener(this);// 회원가입 
+    	lp.cancelBtn.addActionListener(this);// 종료
     	
-    	joinp.idCheck.addActionListener(this); // 아이디 중복체크 버튼
-    	joinp.cancel.addActionListener(this);// 취소
-    	joinp.postFind.addActionListener(this);// 우편번호 검색 
-    	joinp.join.addActionListener(this);
+    	jp.idCheck.addActionListener(this); // 아이디 중복체크 버튼 
+    	jp.cancel.addActionListener(this);// 취소
+    	jp.postFind.addActionListener(this);// 우편번호 검색 
+    	jp.join.addActionListener(this);
     	
     	post.b1.addActionListener(this);// 우편 검색 버튼 
     	post.b2.addActionListener(this);// 취소 
@@ -60,43 +58,43 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource()==loginp.cancelBtn)
+		if(e.getSource()==lp.cancelBtn)
 		{
 			dispose();// window메모리 해제 
 			System.exit(0);// 프로그램 종료
 		}
-		else if(e.getSource()==joinp.idCheck)//아이디 중복 체크
+		else if(e.getSource()==jp.idCheck)// 아이디 중복 체크 
 		{
 			idfrm.tf.setText("");
 			idfrm.b2.setVisible(false);
 			idfrm.la3.setText("");
 			idfrm.setVisible(true);
 		}
-		else if(e.getSource()==joinp.join)
+		else if(e.getSource()==jp.join)
 		{
-			String id=joinp.idF.getText();
+			String id=jp.idF.getText();
 			if(id.length()<1)
 			{
-				joinp.idF.requestFocus();
+				jp.idF.requestFocus();
 				return;
 			}
 			
-			String pwd=String.valueOf(joinp.pwF.getPassword());
+			String pwd=String.valueOf(jp.pwF.getPassword());
 			if(pwd.length()<1)
 			{
-				joinp.pwF.requestFocus();
+				jp.pwF.requestFocus();
 				return;
 			}
 			
-			String name=joinp.nameF.getText();
+			String name=jp.nameF.getText();
 			if(name.length()<1)
 			{
-				joinp.nameF.requestFocus();
+				jp.nameF.requestFocus();
 				return;
 			}
 			
 			String sex="";
-			if(joinp.genderM.isSelected())
+			if(jp.genderM.isSelected())
 			{
 				sex="남자";
 			}
@@ -105,39 +103,47 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener{
 				sex="여자";
 			}
 			
-			String birthday=joinp.birthF.getText();
+			String birthday=jp.birthF.getText();
 			if(birthday.length()<1)
 			{
-				joinp.birthF.requestFocus();
+				jp.birthF.requestFocus();
 				return;
 			}
 			
-			String post=joinp.postF.getText();
+			String post=jp.postF.getText();
 			if(post.length()<1)
 			{
-				joinp.postF.requestFocus();
+				jp.postF.requestFocus();
 				return;
 			}
 			
-			String addr1=joinp.addr1F.getText();
+			String addr1=jp.addr1F.getText();
 			if(addr1.length()<1)
 			{
-				joinp.addr1F.requestFocus();
+				jp.addr1F.requestFocus();
 				return;
 			}
 			
-			String phone1=joinp.emailCombo.getSelectedItem().toString();
-			String phone2=joinp.phoneF1.getText();
-			String phon=phone1+")"+phone2;
-			String email=joinp.emailF.getText();
-			if(email.length()<1)
-			{
-				joinp.emailF.requestFocus();
+			String phone1=jp.phoneF1.getText();
+			String phone2=jp.phoneF2.getText();
+			String phone3=jp.phoneF3.getText();
+			if(phone1.length()<1) {
+				jp.phoneF1.requestFocus();
 				return;
 			}
+			String phone=phone1+"-"+phone2+"-"+phone3;
+
+			String emailId=jp.emailF.getText();
+			String emailSite=jp.emailCombo.getSelectedItem().toString();
+			if(emailId.length()<1) {
+				jp.emailF.requestFocus();
+				return;
+			}
+			String email=emailId+"@"+emailSite;
 			
-			String addr2=joinp.addr2F.getText();
-			String content=joinp.conT.getText();
+			String addr2=jp.addr2F.getText();
+			String content=jp.conT.getText();
+
 			// phone => NOT NULL => 반드시 입력...
 			MemberVO vo=new MemberVO();
 			vo.setId(id);
@@ -149,6 +155,7 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener{
 			vo.setAddr1(addr1);
 			vo.setAddr2(addr2);
 			vo.setEmail(email);
+			vo.setPhone(phone);
 			vo.setContent(content);
 			
 			MemberDAO dao=MemberDAO.newInstance();
@@ -156,14 +163,13 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener{
 			
 			if(res.equals("yes"))
 			{
-				JOptionPane.showMessageDialog(this, "회원가입을 축하합니다");
+				JOptionPane.showMessageDialog(this, "회원 가입에 축하합니다");
 				card.show(getContentPane(), "LOGIN");
 			}
 			else
 			{
-				JOptionPane.showMessageDialog(this, "회원가입에 실패하셨습니다\n"+res);
+				JOptionPane.showMessageDialog(this, "회원 가입에 실패하셨습니다\n"+res);
 			}
-			
 		}
 		else if(e.getSource()==idfrm.b1)
 		{
@@ -174,7 +180,7 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener{
 				idfrm.tf.requestFocus();// tf.focus()
 				return;
 			}
-			// 입력된 상태
+			// 입력된 상태 
 			// 오라클 연결 
 			MemberDAO dao=MemberDAO.newInstance();
 			int count=dao.memberIdCheck(id);
@@ -195,7 +201,7 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener{
 		else if(e.getSource()==idfrm.b2)
 		{
 			String id=idfrm.tf.getText();
-			joinp.idF.setText(id);
+			jp.idF.setText(id);
 			idfrm.setVisible(false);
 		}
 		else if(e.getSource()==post.b2)
@@ -228,12 +234,12 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener{
 				
 				for(ZipcodeVO vo:list)
 				{
-					String[] data={vo.getZipcode(),vo.getAdddress()};
+					String[] data={vo.getZipcode(),vo.getAddress()};
 					post.model.addRow(data);
 				}
 			}
 		}
-		else if(e.getSource()==joinp.postFind)
+		else if(e.getSource()==jp.postFind)
 		{
 			for(int i=post.model.getRowCount()-1;i>=0;i--)
 			{
@@ -242,32 +248,32 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener{
 			post.tf.setText("");
 			post.setVisible(true);
 		}
-		else if(e.getSource()==joinp.cancel)
+		else if(e.getSource()==jp.cancel)
 		{
 			card.show(getContentPane(), "LOGIN");
 		}
-		else if(e.getSource()==loginp.joinBtn)
+		else if(e.getSource()==lp.joinBtn)
 		{
 			card.show(getContentPane(), "JP");
 		}
-		else if(e.getSource()==loginp.loginBtn)
+		else if(e.getSource()==lp.loginBtn)
 		{
 			//1. 입력한 사번 / 이름을 가지고 온다 
 			try
 			{
 				// 유효성 검색 => 오라클 
-				String id=loginp.idField.getText();
+				String id=lp.idField.getText();
 				if(id.length()<1)
 				{
 					JOptionPane.showMessageDialog(this, "아이디를 입력하세요");
-					loginp.idField.requestFocus();
+					lp.idField.requestFocus();
 					return;
 				}
-				String pwd=String.valueOf(loginp.pwField.getPassword());
+				String pwd=String.valueOf(lp.pwField.getPassword());
 				if(pwd.length()<1)
 				{
 					JOptionPane.showMessageDialog(this, "비밀번호를 입력하세요");
-					loginp.pwField.requestFocus();
+					lp.pwField.requestFocus();
 					return;
 				}
 				
@@ -279,16 +285,16 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener{
 				{
 					// 사번이 없는 경우 
 					JOptionPane.showMessageDialog(this, "아이디가 존재하지 않습니다");
-					loginp.idField.setText("");
-					loginp.pwField.setText("");
-					loginp.idField.requestFocus();
+					lp.idField.setText("");
+					lp.pwField.setText("");
+					lp.idField.requestFocus();
 				}
 				else if(result.equals("NOPWD"))
 				{
 					// 이름이 틀린 경우
 					JOptionPane.showMessageDialog(this, "비밀번호가 틀립니다");
-					loginp.pwField.setText("");
-					loginp.pwField.requestFocus();
+					lp.pwField.setText("");
+					lp.pwField.requestFocus();
 				}
 				else
 				{
@@ -311,14 +317,14 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener{
 		{
 			if(e.getClickCount()==2)
 			{
-				int row=post.table.getSelectedRow();
-				String zip=post.model.getValueAt(row, 0).toString();
-				String addr=post.model.getValueAt(row, 1).toString();
-				
-				joinp.postF.setText(zip);
-				joinp.addr1F.setText(addr);
-				
-				post.setVisible(false);
+			int row=post.table.getSelectedRow();
+			String zip=post.model.getValueAt(row, 0).toString();
+			String addr=post.model.getValueAt(row, 1).toString();
+			
+			jp.postF.setText(zip);
+			jp.addr1F.setText(addr);
+			
+			post.setVisible(false);
 			}
 		}
 	}

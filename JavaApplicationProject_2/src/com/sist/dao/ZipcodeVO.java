@@ -1,7 +1,7 @@
 package com.sist.dao;
 
 public class ZipcodeVO {
-  private String zipcode, sido, gugun, dong, bunji, adddress;
+  private String zipcode, sido, gugun, dong, bunji, address;
 
   public String getZipcode() {
 	  return zipcode;
@@ -43,7 +43,7 @@ public class ZipcodeVO {
 	  this.bunji = bunji;
   }
 
-  public String getAdddress() {
+  public String getAddress() {
 	  return sido+" "+gugun+" "+dong+" "+bunji;
   }
 
