@@ -11,18 +11,19 @@ import com.sist.dao.*;
 
 public class ClientMain extends JFrame implements ActionListener,MouseListener{
     CardLayout card=new CardLayout();
+    FindPanel fp=new FindPanel();
     LoginPanel lp=new LoginPanel();
     MainPanel mp=new MainPanel();
     JoinPanel jp=new JoinPanel();
-    FindPanel fp=new FindPanel();
     PostFindFrame post=new PostFindFrame();// 우편번호 검색 
     IdCheckFrame idfrm=new IdCheckFrame();
     public ClientMain()
     {
+    	
     	setLayout(card);
+    	add("MP",mp);
     	add("FIND",fp);
     	add("LOGIN",lp);
-    	add("MP",mp);
     	add("JP",jp);
     	setSize(960, 750);
     	setResizable(false);
