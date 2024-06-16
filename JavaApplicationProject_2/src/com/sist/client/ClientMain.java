@@ -19,7 +19,6 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener{
     IdCheckFrame idfrm=new IdCheckFrame();
     public ClientMain()
     {
-    	
     	setLayout(card);
     	add("MP",mp);
     	add("FIND",fp);

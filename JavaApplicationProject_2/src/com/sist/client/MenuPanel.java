@@ -20,5 +20,7 @@ public class MenuPanel extends JPanel{
     	add(chatBtn);
     	add(newsBtn);
     	add(exitBtn);
+    	
+    	
     }
 }
