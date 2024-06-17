@@ -148,14 +148,8 @@ public class JoinPanel extends JPanel{
       btnP.add(cancel);
       btnP.setBounds(10, 660, 940, 35);
       add(btnP);
-      cancel.addActionListener(new ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-              // 이전 화면(로그인 화면)으로 돌아가기 위해 CardLayout 객체를 사용하여 로그인 화면을 보여줍니다.
-              CardLayout cardLayout = (CardLayout) getParent().getLayout();
-              cardLayout.show(getParent(), "LOGIN");
-          }
-      });
+
+      setSize(960, 750);
    }
 }
   

@@ -9,7 +9,7 @@ public class Server implements Runnable{
     // 접속 담당 
 	private ServerSocket ss;
 	// PORT => 0~65535 => 0~1023
-	private final int PORT=3355;
+	private final int PORT=7777;
 	private MemberDAO dao;
 	// 저장 공간 (접속자)
 	private Vector<Client> waitVc=new Vector<Client>();
@@ -137,8 +137,40 @@ public class Server implements Runnable{
 					 }
 					 break;
 					 // 나가기 요청
-					 case Function.EXIT:
+					 /*
+					  *    로그인
+					  *    ----
+					  *      로그인 하는 사람 => MYLOG
+					  *      로그인 된 사람 => LOGIN
+					  *    나가기
+					  *    ----
+					  *      남아 있는 사람 => EXIT
+					  *      실제 나가는 사람 => MYEXIT
+					  *      
+					  *    Client / Server (웹)
+					  *      |        |
+					  *    Slave    Master
+					  *    
+					  *    Server => Client에 지시를 내린다
+					  *    Client => Server에서 지시를 받아서 동작 
+					  */
+					 case Function.EXIT: // exit.jsp
 					 {
+                        messageAll(Function.EXIT+"|"+id);// 테이블에서 제거
+                        messageAll(Function.CHAT+"|[☞ 알림]"+name+"님이 입장하셨습니다");
+                        // 남아 있는 사람 처리
+                        
+                        // 실제 나가는 사람 처리
+                        for(Client client:waitVc)
+                        {
+                        	if(client.id.equals(id))
+                        	{
+                        		messageTo(Function.MYEXIT+"|");// 윈도우창 종료 
+                        		waitVc.remove(client);
+                        		in.close();
+                        		out.close();
+                        	}
+                        }
                         
 					 }
 					 break;
@@ -146,11 +178,39 @@ public class Server implements Runnable{
 					 case Function.CHAT:
 					 {
                          String message=st.nextToken();
-                         messageTo(Function.CHAT+"|["
+                         messageAll(Function.CHAT+"|["
                         		 +name+"]"+message);
 					 }
 					 break;
-
+					 /*
+					  *   클라이언트 : 요청 / 응답 출력
+					  *            ---- <a> , <input type=button> , <form>
+					  *            ---- html / css
+					  *   --------------------          
+					  *   서버 : 요청받기 => 자바 라이브러리 (HttpServletRequest)
+					  *         응답하기 => HttpServletResponse
+					  *         ------------
+					  *         저장하기
+					  *         수정기능
+					  *         삭제기능
+					  *         찾기기능
+					  *         ------------ JDBC (오라클 연동)   
+					  *   --------------------          
+					  */
+					 case Function.INFO:
+					 {
+						 String yid=st.nextToken();
+						 MemberVO vo=dao.memberInfo2(yid);
+						 messageTo(Function.INFO+"|"
+								  +vo.getName()+"|"
+								  +vo.getSex()+"|"
+								  +vo.getAddr1()+"|"
+								  +vo.getEmail()+"|"
+								  +vo.getPhone()+"|"
+								  +vo.getContent());
+					 }
+					 break;
+						 
 					}
 				}catch(Exception ex) {}
 			}
