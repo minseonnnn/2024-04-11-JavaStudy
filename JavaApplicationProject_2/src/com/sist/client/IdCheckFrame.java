@@ -2,8 +2,8 @@ package com.sist.client;
 import java.awt.*;
 import javax.swing.*;
 public class IdCheckFrame extends JFrame{
-      JLabel la1, la2, la3;
-      JButton b1, b2, b3;
+      JLabel la1,la2,la3;
+      JButton b1,b2,b3;
       JTextField tf;
       
       public IdCheckFrame()
@@ -26,7 +26,7 @@ public class IdCheckFrame extends JFrame{
     	  b1.setBounds(200, 55, 60, 30);
     	  add(b1);
     	  
-    	  la3=new JLabel("사용 가능한 아이디입니다",JLabel.CENTER);
+    	  la3=new JLabel("",JLabel.CENTER);
     	  la3.setForeground(Color.red);
     	  la3.setBounds(10, 95, 250, 30);
     	  add(la3);
@@ -41,8 +41,8 @@ public class IdCheckFrame extends JFrame{
     	  //setVisible(true);
     	  
       }
-      /*public static void main(String[] args) {
-		new IdCheckFrame();
+		/*
+		 * public static void main(String[] args) { new IdCheckFrame(); }
+		 */
       
-	}*/
 }

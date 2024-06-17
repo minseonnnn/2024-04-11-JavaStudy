@@ -35,13 +35,13 @@ import java.awt.event.*;
  *                             t3   t1   t2   => 우선 순위 => JVM ...
  *                            
  */
-public class Client extends JFrame implements ActionListener, Runnable{
-    JTextField tf, tf1;
-    JButton b1, b2;
+public class Client extends JFrame implements ActionListener,Runnable{
+    JTextField tf,tf1;
+    JButton b1,b2;
     JTextArea ta;
     String name;
     // 네트워크 관련 
-    Socket s; // 서버 연결
+    Socket s; // 서버연결 
     // 전송 
     OutputStream out;
     // 서버로부터 전송값 받기
@@ -50,6 +50,7 @@ public class Client extends JFrame implements ActionListener, Runnable{
     public Client()
     {
     	tf=new JTextField(15);
+    	
     	b1=new JButton("접속");
     	b2=new JButton("종료");
     	ta=new JTextArea();
@@ -57,11 +58,10 @@ public class Client extends JFrame implements ActionListener, Runnable{
     	bar=js.getVerticalScrollBar();
     	tf1=new JTextField(30);
     	tf1.setEnabled(false);
-    	
     	JPanel p=new JPanel();
-    	p.add(tf); p.add(b1); p.add(b2);
+    	p.add(tf);p.add(b1);p.add(b2);
     	add("North",p);
-    	ta.setEditable(false);// 편집이 안되게
+    	ta.setEditable(false);
     	add("Center",js);
     	add("South",tf1);
     	
@@ -71,11 +71,10 @@ public class Client extends JFrame implements ActionListener, Runnable{
     	b1.addActionListener(this);
     	b2.addActionListener(this);
     	tf1.addActionListener(this);
-    	
     }
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-        new Client();
+		new Client();
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -84,7 +83,7 @@ public class Client extends JFrame implements ActionListener, Runnable{
 		{
 			try
 			{
-				name=tf.getText();
+				name=tf.getText(); 
 				if(name.length()<1) // 강제로 입력 
 				{
 					tf.requestFocus();
@@ -92,20 +91,20 @@ public class Client extends JFrame implements ActionListener, Runnable{
 				}
 				// 1. 소켓 생성
 				s=new Socket("192.168.0.126",7777);
-				// 2. 서버의 송수신 위치 확인
-				// 수신
+				// 2. 서버의 송수신 위치 확인 
+				// 수신 
 				in=new BufferedReader(new InputStreamReader(s.getInputStream()));
 				// 송신
 				out=s.getOutputStream();
 				
 				
-				// 연결이 된 경우
+				// 연결이 된 경우 
 				b1.setEnabled(false);
 				tf1.setEnabled(true);
 				tf1.requestFocus();
 				
-			}catch(Exception ex) {}
-			new Thread(this).start(); // 쓰레드 동작 // Client가 가지고 있는 run() 호출
+			}catch(Exception ex){}
+			new Thread(this).start(); //쓰레드 동작 // Client가 가지고 있는 run() 호출 
 		}
 		else if(e.getSource()==b2)// 종료
 		{
@@ -118,8 +117,8 @@ public class Client extends JFrame implements ActionListener, Runnable{
 				String msg=tf1.getText();
 				if(msg.length()<1) return;
 				
-				// 입력이 된 상태 => 서버로 문자열 전송
-				out.write(("["+name+"]"+msg+"\n").getBytes());
+				// 입력이 된상태 => 서버로 문자열 전송 
+				out.write(("["+name+"] "+msg+"\n").getBytes());
 				tf1.setText("");
 				tf1.requestFocus();
 			}catch(Exception ex) {}
@@ -134,8 +133,8 @@ public class Client extends JFrame implements ActionListener, Runnable{
 			while(true)
 			{
 				String msg=in.readLine();
-			    ta.append(msg+"\n");
-			    bar.setValue(bar.getMaximum());
+				ta.append(msg+"\n");
+				bar.setValue(bar.getMaximum());
 			}
 		}catch(Exception ex) {}
 	}
