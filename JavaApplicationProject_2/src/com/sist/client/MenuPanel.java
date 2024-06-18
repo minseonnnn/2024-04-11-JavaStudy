@@ -8,7 +8,7 @@ public class MenuPanel extends JPanel{
     	setLayout(new GridLayout(1,6,5,5));
     	//setLayout(new GridLayout(6,1,5,5));
     	homeBtn=new JButton("홈"); // 1명
-    	findBtn=new JButton("상품검색"); // 1명
+    	findBtn=new JButton("도서검색"); // 1명
     	boardBtn=new JButton("커뮤니티"); // 1명
     	chatBtn=new JButton("실시간 채팅"); // 2명
     	newsBtn=new JButton("뉴스 검색"); // 1명

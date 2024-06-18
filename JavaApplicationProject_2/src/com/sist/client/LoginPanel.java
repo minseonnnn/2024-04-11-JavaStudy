@@ -11,6 +11,8 @@ public class LoginPanel extends JFrame{
 	   public LoginPanel() {
 	      back=Toolkit.getDefaultToolkit().getImage("c:\\project_image\\back.jpg");
 	      
+	      
+	      
 	      titleLa=new JLabel("도서관리 프로그램",JLabel.CENTER);
 	      titleLa.setFont(new Font("맑은 고딕",Font.BOLD,30));
 	      titleLa.setForeground(Color.WHITE);

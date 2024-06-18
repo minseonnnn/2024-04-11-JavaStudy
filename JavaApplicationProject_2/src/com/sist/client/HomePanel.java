@@ -13,7 +13,7 @@ import java.awt.event.MouseListener;
 import com.sist.commons.*;
 import java.util.*;
 import java.net.*;
-public class HomePanel extends JPanel implements ActionListener,MouseListener{
+public class HomePanel extends JPanel implements ActionListener, MouseListener{
     JPanel pan=new JPanel(); // 12개 이미지 출력 
     JButton b1,b2; // 이전 , 다음 
     JLabel la=new JLabel("0 page / 0 pages");
@@ -29,7 +29,7 @@ public class HomePanel extends JPanel implements ActionListener,MouseListener{
     {
     	this.cp=cp;
     	dao=GoodsDAO.newInstance();
-    	pan.setLayout(new GridLayout(3,4,5,5));
+    	pan.setLayout(new GridLayout(3,4,5,8));
     	
     	setLayout(new BorderLayout());
     	add("Center",pan);
@@ -52,11 +52,11 @@ public class HomePanel extends JPanel implements ActionListener,MouseListener{
     		GoodsVO vo=list.get(i);
     		try
     		{
-    			URL url=new URL(vo.getGoods_poster());
-    			Image img=ImageChange.getImage(new ImageIcon(url), 240, 200);
+    			URL url=new URL(vo.getImage());
+    			Image img=ImageChange.getImage(new ImageIcon(url), 150, 180);
     			// 이미지 크기 축소 
     			imgs[i]=new JLabel(new ImageIcon(img));
-    			imgs[i].setToolTipText(vo.getGoods_name()+"^"+vo.getNo());
+    			imgs[i].setToolTipText(vo.getImage()+"^"+vo.getNum());
     			pan.add(imgs[i]);
     			imgs[i].addMouseListener(this);
     		}catch(Exception ex){}
