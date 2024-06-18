@@ -8,14 +8,22 @@ import javax.swing.JPanel;
 public class ControllPanel extends JPanel{
    CardLayout card=new CardLayout();
    //EmpListPanel ep=new EmpListPanel();
-   HomePanel hp=new HomePanel();
+   HomePanel hp;
+   GoodsDetailPanel dp;
+   FindPanel fp;
    ChatPanel chatP=new ChatPanel();
    public ControllPanel()
    {
 	   setLayout(card);
 	   //add("EP",ep);
-	   add("CHAT",chatP);
+	   hp=new HomePanel(this);
+	   dp=new GoodsDetailPanel(this);
+	   fp=new FindPanel(this);
 	   add("HP",hp);
+	   add("CHAT",chatP);
+	   add("DP",dp);
+	   add("FP",fp);
+	   
 	  
    }
 }
