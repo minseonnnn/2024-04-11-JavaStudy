@@ -1,21 +1,27 @@
 package com.sist.dao;
 
+import java.sql.Date;
+
 import lombok.Data;
 
 /*
- *   NO                                                 NUMBER(38)
-     GOODS_NAME                                         VARCHAR2(4000)
-     GOODS_SUB                                          VARCHAR2(4000)
-     GOODS_PRICE                                        VARCHAR2(26)
-     GOODS_DISCOUNT                                     NUMBER(38)
-     GOODS_FIRST_PRICE                                  VARCHAR2(26)
-     GOODS_DELIVERY                                     VARCHAR2(26)
-     GOODS_POSTER                                       VARCHAR2(4000)
-     HIT                                                NUMBER(38)
+ *  num                                               NUMBER(38)
+    ISBN                                               NUMBER(38)
+    bookname                                             VARCHAR2(4000)
+    writer                                            VARCHAR2(4000)
+    translator                                           VARCHAR2(4000)
+    page                                              NUMBER(38)
+    price                                               NUMBER(38)
+    pubdate                                             DATE
+    series                                             VARCHAR2(4000)
+    paper                                             VARCHAR2(26)
+    image                                               VARCHAR2(4000)
+    detail                                           VARCHAR2(4000)
  */
 @Data
 public class GoodsVO {
-   private int no, goods_discount, hit;
-   private String goods_name, goods_sub, goods_price, goods_first_price, goods_delivery, goods_poster;
-   
+   private int num, page, price;
+   private long isbn;
+   private String bookname, writer, translator, series, paper, image, detail;
+   private Date pubdate;
 }

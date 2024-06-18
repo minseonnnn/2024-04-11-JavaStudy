@@ -127,7 +127,7 @@ public class GoodsDAO {
     		 // 1. 연결
     		 getConnection();
     		 // 2. SQL문장
-    		 String sql="SELECT CEIL(COUNT(*)/12.0) FROM goods_all";
+    		 String sql="SELECT CEIL(COUNT(*)/12.0) FROM wiki";
     		 // 3. 오라클로 전송
     		 ps=conn.prepareStatement(sql);
     		 // 4. SQL문장 실행 결과를 가지고 온다 => 실행 결과를 저장 (ResultSet)
@@ -169,147 +169,119 @@ public class GoodsDAO {
       *   C# => ASP.net
       *   자바, 코틀린 => 스프링                                                
       */
-     public ArrayList<GoodsVO> goodsListData(int page)
-     {
-    	 ArrayList<GoodsVO> list=new ArrayList<GoodsVO>();
-    	 // VO는 상품 한개에 대한 모든 정보가 저장 
-    	 try
-    	 {
-    		 getConnection();
-    		 String sql="SELECT no,goods_name,goods_poster,num "
-    				   +"FROM (SELECT no,goods_name,goods_poster,rownum as num "
-    				   +"FROM (SELECT no,goods_name,goods_poster "
-    				   +"FROM goods_all ORDER BY no ASC)) "
-    				   +"WHERE num BETWEEN ? AND ?";
-    		 // 오라클 페이지 나누기 => 인라인 뷰 => 가상 컬럼 : rownum (자르기)
-    		 // rownum은 Top-N => 처음부터 몇개 => 중간에 자르는 것은 불가능 
-    		 // ?에 값을 채운다
-    		 int rowSize=12;
-    		 int start=(rowSize*page)-(rowSize-1);
-    		 //           12*1 - 11 => 1 ==> 12*2 -11 => 13
-    		 int end=rowSize*page;// 12 ==> 24
-    		 // 1번부터 (rownum => 1번) 
-    		 ps=conn.prepareStatement(sql);
-    		 ps.setInt(1, start);
-    		 ps.setInt(2, end);
-    		 
-    		 // 실행 요청
-    		 ResultSet rs=ps.executeQuery();
-    		 // 첫번째부터 읽기
-    		 while(rs.next())
-    		 {
-    			 GoodsVO vo=new GoodsVO();
-    			 vo.setNo(rs.getInt(1));
-    			 vo.setGoods_name(rs.getString(2));
-    			 vo.setGoods_poster(rs.getString(3));
-    			 list.add(vo);
-    		 }
-    		 
-    		 rs.close();
-    	 }catch(Exception ex)
-    	 {
-    		 ex.printStackTrace();
-    	 }
-    	 finally
-    	 {
-    		 // 닫기
-    		 disConnection();
-    	 }
-    	 return list;
-     }
-     // 상세보기 => 한개에 대한 정보 
+     public ArrayList<GoodsVO> goodsListData(int page) {
+    	    ArrayList<GoodsVO> list = new ArrayList<>();
+    	    try {
+    	        getConnection();
+    	        String sql = "SELECT num, bookname, image " +
+    	                     "FROM (SELECT num, bookname, image, ROWNUM AS rnum " +
+    	                     "      FROM (SELECT num, bookname, image " +
+    	                     "            FROM wiki " +
+    	                     "            ORDER BY num ASC)) " +
+    	                     "WHERE rnum BETWEEN ? AND ?";
+    	        int rowSize = 12;
+    	        int start = (rowSize * page) - (rowSize - 1);
+    	        int end = rowSize * page;
+    	        
+    	        ps = conn.prepareStatement(sql);
+    	        ps.setInt(1, start);
+    	        ps.setInt(2, end);
+    	        
+    	        ResultSet rs = ps.executeQuery();
+    	        while (rs.next()) {
+    	            GoodsVO vo = new GoodsVO();
+    	            vo.setNum(rs.getInt(1));
+    	            vo.setBookname(rs.getString(2));
+    	            vo.setImage(rs.getString(3));
+    	            list.add(vo);
+    	        }
+    	        rs.close();
+    	    } catch (Exception ex) {
+    	        ex.printStackTrace();
+    	    } finally {
+    	        disConnection();
+    	    }
+    	    return list;
+    	}     // 상세보기 => 한개에 대한 정보 
      /*
-      *   NO                                                 NUMBER(38)
-          GOODS_NAME                                         VARCHAR2(4000)
-          GOODS_SUB                                          VARCHAR2(4000)
-          GOODS_PRICE                                        VARCHAR2(26)
-          GOODS_DISCOUNT                                     NUMBER(38)
-          GOODS_FIRST_PRICE                                  VARCHAR2(26)
-          GOODS_DELIVERY                                     VARCHAR2(26)
-          GOODS_POSTER                                       VARCHAR2(4000)
-          HIT                                                NUMBER(38)
+      *  num                                               NUMBER(38)
+         ISBN                                               NUMBER(38)
+         bookname                                             VARCHAR2(4000)
+         writer                                            VARCHAR2(4000)
+         translator                                           VARCHAR2(4000)
+         page                                              NUMBER(38)
+         price                                               NUMBER(38)
+         pubdate                                             DATE
+         series                                             VARCHAR2(4000)
+         paper                                             VARCHAR2(26)
+         image                                               VARCHAR2(4000)
+         detail                                           VARCHAR2(4000)
       */
-     public GoodsVO goodsDetailData(int no)
-     {
-    	 GoodsVO vo=new GoodsVO();
-    	 try
-    	 {
-    		 getConnection();
-    		 // 조회수 증가 
-    		 String sql="UPDATE goods_all SET "
-    				   +"hit=hit+1 "
-    				   +"WHERE no=?";
-    		 ps=conn.prepareStatement(sql);
-    		 ps.setInt(1, no);
-    		 ps.executeUpdate(); // commit()
-    		 
-    		 // 데이터 읽기
-    		 sql="SELECT no,goods_name,goods_sub,goods_price,goods_discount,"
-    		    +"goods_first_price,goods_delivery,goods_poster "
-    			+"FROM goods_all "
-    		    +"WHERE no=?";
-    		 
-    		 ps=conn.prepareStatement(sql);
-    		 // ?에 값을 채운다
-    		 ps.setInt(1, no);
-    		 
-    		 // 결과값
-    		 ResultSet rs=ps.executeQuery();
-    		 rs.next();
-    		 // 값을 VO에 저장
-    		 vo.setNo(rs.getInt(1));
-    		 vo.setGoods_name(rs.getString(2));
-    		 vo.setGoods_sub(rs.getString(3));
-    		 vo.setGoods_price(rs.getString(4));
-    		 vo.setGoods_discount(rs.getInt(5));
-    		 vo.setGoods_first_price(rs.getString(6));
-    		 vo.setGoods_delivery(rs.getString(7));
-    		 vo.setGoods_poster(rs.getString(8));
-    		 rs.close();
-    	 }catch(Exception ex)
-    	 {
-    		 ex.printStackTrace();
-    	 }
-    	 finally
-    	 {
-    		 disConnection();
-    	 }
-    	 return vo;
-     }
+     public GoodsVO goodsDetailData(int no) {
+    	    GoodsVO vo = new GoodsVO();
+    	    try {
+    	        getConnection();
+    	        
+    	        // 상세 정보 조회
+    	        String selectSql = "SELECT num, isbn, bookname, writer, translator, page, price, " +
+    	                           "       pubdate, series, paper, image, detail " +
+    	                           "FROM wiki " +
+    	                           "WHERE num = ?";
+    	        ps = conn.prepareStatement(selectSql);
+    	        ps.setInt(1, no);
+    	        
+    	        ResultSet rs = ps.executeQuery();
+    	        if (rs.next()) {
+    	            vo.setNum(rs.getInt(1));
+    	            vo.setIsbn(rs.getLong(2));
+    	            vo.setBookname(rs.getString(3));
+    	            vo.setWriter(rs.getString(4));
+    	            vo.setTranslator(rs.getString(5));
+    	            vo.setPage(rs.getInt(6));
+    	            vo.setPrice(rs.getInt(7));
+    	            vo.setPubdate(rs.getDate(8));
+    	            vo.setSeries(rs.getString(9));
+    	            vo.setPaper(rs.getString(10));
+    	            vo.setImage(rs.getString(11));
+    	            vo.setDetail(rs.getString(12));
+    	        }
+    	        rs.close();
+    	    } catch (Exception ex) {
+    	        ex.printStackTrace();
+    	    } finally {
+    	        disConnection();
+    	    }
+    	    return vo;
+    	}
      // 검색 => LIKE
-     public ArrayList<GoodsVO> goodsFindData(String name)
-     {
-    	 ArrayList<GoodsVO> list=new ArrayList<GoodsVO>();
-    	 try
-    	 {
-    		 getConnection();
-    		 String sql="SELECT no,goods_name,goods_poster,goods_price "
-    				   +"FROM goods_all "
-    				   +"WHERE goods_name LIKE '%'||?||'%' "
-    				   +"ORDER BY no ASC";
-    		 ps=conn.prepareStatement(sql);
-    		 ps.setString(1, name);
-    		 
-    		 ResultSet rs=ps.executeQuery();
-    		 while(rs.next())
-    		 {
-    			 GoodsVO vo=new GoodsVO();
-    			 vo.setNo(rs.getInt(1));
-    			 vo.setGoods_name(rs.getString(2));
-    			 vo.setGoods_poster(rs.getString(3));
-    			 vo.setGoods_price(rs.getString(4));
-    			 list.add(vo);
-    		 }
-    		 rs.close();
-    	 }catch(Exception ex)
-    	 {
-    		 ex.printStackTrace();
-    	 }
-    	 finally
-    	 {
-    		 disConnection();
-    	 }
-    	 return list;
-     }
+     public ArrayList<GoodsVO> goodsFindData(String name) {
+    	    ArrayList<GoodsVO> list = new ArrayList<>();
+    	    try {
+    	        getConnection();
+    	        String sql = "SELECT num, bookname, writer, price, series " +
+    	                     "FROM wiki " +
+    	                     "WHERE bookname LIKE '%' || ? || '%' " +
+    	                     "ORDER BY num ASC";
+    	        ps = conn.prepareStatement(sql);
+    	        ps.setString(1, name);
+    	        
+    	        ResultSet rs = ps.executeQuery();
+    	        while (rs.next()) {
+    	            GoodsVO vo = new GoodsVO();
+    	            vo.setNum(rs.getInt(1));
+    	            vo.setBookname(rs.getString(2));
+    	            vo.setWriter(rs.getString(3));
+    	            vo.setPrice(rs.getInt(4));
+    	            vo.setSeries(rs.getString(5));
+    	            list.add(vo);
+    	        }
+    	        rs.close();
+    	    } catch (Exception ex) {
+    	        ex.printStackTrace();
+    	    } finally {
+    	        disConnection();
+    	    }
+    	    return list;
+    	}
      // 구매 => INSERT , UPDATE , DELETE 
 }
