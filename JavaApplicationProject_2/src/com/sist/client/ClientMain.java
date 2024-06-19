@@ -45,13 +45,13 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener,R
     {
     	setLayout(null);
     	
-    	mp.setBounds(300, 15, 600, 35);
+    	mp.setBounds(280, 25, 650, 35);
     	add(mp);
-    	cp.setBounds(10, 60, 930, 600);
+    	cp.setBounds(10, 60, 930, 680);
     	add(cp);
     	
     	
-    	setSize(960, 700);
+    	setSize(960, 800);
     	setResizable(false);
     	//setVisible(true);
     	
@@ -79,6 +79,7 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener,R
     	mp.chatBtn.addActionListener(this);
     	mp.homeBtn.addActionListener(this);
     	mp.findBtn.addActionListener(this);
+    	mp.boardBtn.addActionListener(this);
     	
     	cp.chatP.tf.addActionListener(this);
     	
@@ -98,6 +99,16 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener,R
 		{
 			dispose();// window메모리 해제 
 			System.exit(0);// 프로그램 종료
+		}
+		else if(e.getSource()==lp.joinBtn)
+		{
+			lp.setVisible(false);
+			jp.setVisible(true);
+			
+		}
+		else if(e.getSource()==mp.boardBtn)
+		{
+			cp.card.show(cp, "LIST");// <a href="list.jsp">
 		}
 		else if(e.getSource()==mp.findBtn)
 		{
@@ -322,11 +333,7 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener,R
 			jp.setVisible(false);
 			lp.setVisible(true);
 		}
-		else if(e.getSource()==lp.joinBtn)
-		{
-			jp.setVisible(true);
-			lp.setVisible(false);
-		}
+		
 		else if(e.getSource()==lp.loginBtn)
 		{
 			//1. 입력한 사번 / 이름을 가지고 온다 

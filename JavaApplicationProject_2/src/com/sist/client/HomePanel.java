@@ -2,6 +2,7 @@ package com.sist.client;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
 
 import com.sist.dao.*;
 import java.awt.*;
@@ -19,17 +20,18 @@ public class HomePanel extends JPanel implements ActionListener, MouseListener{
     JLabel la=new JLabel("0 page / 0 pages");
     JLabel[] imgs=new JLabel[12]; 
     
+
     int curpage=1; // 현재 페이지 
     int totalpage=0; // 총페이지 
     // 데이터베이스 연결
-    GoodsDAO dao;
+    BooksDAO dao;
     // 초기화 
     ControllPanel cp;
     public HomePanel(ControllPanel cp)
     {
     	this.cp=cp;
-    	dao=GoodsDAO.newInstance();
-    	pan.setLayout(new GridLayout(3,4,5,8));
+    	dao=BooksDAO.newInstance();
+    	pan.setLayout(new GridLayout(3,4,3,3));
     	
     	setLayout(new BorderLayout());
     	add("Center",pan);
@@ -39,21 +41,21 @@ public class HomePanel extends JPanel implements ActionListener, MouseListener{
     	p.add(b1);p.add(la);p.add(b2);
     	add("South",p);
     	print();
-    	
-    	b1.addActionListener(this);
-    	b2.addActionListener(this);
+		b1.addActionListener(this);
+		b2.addActionListener(this);
+
     }
     public void print()
     {
-    	totalpage=dao.goodsTotalPage();
-    	ArrayList<GoodsVO> list=dao.goodsListData(curpage);
+    	totalpage=dao.BooksTotalPage();
+    	ArrayList<BooksVO> list=dao.BooksListData(curpage);
     	for(int i=0;i<list.size();i++)
     	{
-    		GoodsVO vo=list.get(i);
+    		BooksVO vo=list.get(i);
     		try
     		{
     			URL url=new URL(vo.getImage());
-    			Image img=ImageChange.getImage(new ImageIcon(url), 150, 180);
+    			Image img=ImageChange.getImage(new ImageIcon(url), 110, 140);
     			// 이미지 크기 축소 
     			imgs[i]=new JLabel(new ImageIcon(img));
     			imgs[i].setToolTipText(vo.getImage()+"^"+vo.getNum());
@@ -145,7 +147,6 @@ public class HomePanel extends JPanel implements ActionListener, MouseListener{
 	}
     
 }
-
 
 
 

@@ -10,16 +10,16 @@ import java.awt.event.*;
 import java.text.*;
 
 
-public class GoodsDetailPanel extends JPanel implements ActionListener, ItemListener {
+public class BooksDetailPanel extends JPanel implements ActionListener, ItemListener {
     JLabel la1, la2, la3, la4, la5, la6, la7, la8;
     JButton b1, b2;
     JComboBox<Integer> box;
     JLabel pLa, tLa;
     ControllPanel cp; // 화면 이동을 위한 ControllPanel 객체
-    GoodsDAO dao; // 데이터베이스 접근을 위한 GoodsDAO 객체
+    BooksDAO dao; // 데이터베이스 접근을 위한 GoodsDAO 객체
 
-    public GoodsDetailPanel(ControllPanel cp) {
-        dao=GoodsDAO.newInstance(); // GoodsDAO 객체 생성
+    public BooksDetailPanel(ControllPanel cp) {
+        dao=BooksDAO.newInstance(); // GoodsDAO 객체 생성
         this.cp = cp; // ControllPanel 객체 할당
 
         setLayout(null); // 레이아웃 설정
@@ -100,7 +100,7 @@ public class GoodsDetailPanel extends JPanel implements ActionListener, ItemList
 
     public void print(int no) {
         // 1. 오라클 데이터베이스에서 데이터를 가져온다
-        GoodsVO vo=dao.goodsDetailData(no);
+    	BooksVO vo=dao.BooksDetailData(no);
 
         // 2. 데이터를 GUI에 표시
         try {
@@ -111,7 +111,7 @@ public class GoodsDetailPanel extends JPanel implements ActionListener, ItemList
             ex.printStackTrace();
         }
 
-        la2.setText("<html><b>" + vo.getBookname() + "</b></html>");
+        la2.setText("<html><font size= 5>"+vo.getBookname()+"</font></html>");
         la3.setText("<html><font color=gray>" +"시리즈명: "+ vo.getSeries() + "</font></html>");
         la4.setText("지은이: "+ vo.getWriter());
         la5.setText("가격: "+String.valueOf(vo.getPrice()));

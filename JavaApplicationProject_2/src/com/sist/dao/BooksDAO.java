@@ -74,7 +74,7 @@ import java.sql.*;
  *      ---------------------- 내일 : CRUD ....
  *                             오픈 API => 네이버 연결                
  */
-public class GoodsDAO {
+public class BooksDAO {
 	 // 오라클 연결
      private Connection conn;
      // SQL문장 송수신
@@ -83,9 +83,9 @@ public class GoodsDAO {
      private final String URL="jdbc:oracle:thin:@localhost:1521:XE";
      
      // 싱글턴 => 메모리 누수 현상 방지 => 객체를 한번만 생성 => DAO
-     private static GoodsDAO dao;
+     private static BooksDAO dao;
      // 1. 드라이버 등록 : 한번만 수행 (생성자) => 멤버변수의 초기화
-     public GoodsDAO()
+     public BooksDAO()
      {
     	 try
     	 {
@@ -110,16 +110,16 @@ public class GoodsDAO {
     	 }catch(Exception ex) {}
      }
      // 4. 싱클턴 => static은 메모리 공간 1개만 가지고 있다
-     public static GoodsDAO newInstance()
+     public static BooksDAO newInstance()
      {
     	 if(dao==null)
-    		 dao=new GoodsDAO();
+    		 dao=new BooksDAO();
     	 return dao;
      }
      ///////////////////////////////////////////////// DAO의 필수 공통 코드
      // 기능
      // 총페이지 구하기
-     public int goodsTotalPage()
+     public int BooksTotalPage()
      {
     	 int total=0;
     	 try
@@ -169,8 +169,8 @@ public class GoodsDAO {
       *   C# => ASP.net
       *   자바, 코틀린 => 스프링                                                
       */
-     public ArrayList<GoodsVO> goodsListData(int page) {
-    	    ArrayList<GoodsVO> list = new ArrayList<>();
+     public ArrayList<BooksVO> BooksListData(int page) {
+    	    ArrayList<BooksVO> list = new ArrayList<>();
     	    try {
     	        getConnection();
     	        String sql = "SELECT num, bookname, image " +
@@ -189,7 +189,7 @@ public class GoodsDAO {
     	        
     	        ResultSet rs = ps.executeQuery();
     	        while (rs.next()) {
-    	            GoodsVO vo = new GoodsVO();
+    	            BooksVO vo = new BooksVO();
     	            vo.setNum(rs.getInt(1));
     	            vo.setBookname(rs.getString(2));
     	            vo.setImage(rs.getString(3));
@@ -217,8 +217,8 @@ public class GoodsDAO {
          image                                               VARCHAR2(4000)
          detail                                           VARCHAR2(4000)
       */
-     public GoodsVO goodsDetailData(int no) {
-    	    GoodsVO vo = new GoodsVO();
+     public BooksVO BooksDetailData(int no) {
+    	    BooksVO vo = new BooksVO();
     	    try {
     	        getConnection();
     	        
@@ -254,8 +254,8 @@ public class GoodsDAO {
     	    return vo;
     	}
      // 검색 => LIKE
-     public ArrayList<GoodsVO> goodsFindData(String name) {
-    	    ArrayList<GoodsVO> list = new ArrayList<>();
+     public ArrayList<BooksVO> BooksFindData(String name) {
+    	    ArrayList<BooksVO> list = new ArrayList<>();
     	    try {
     	        getConnection();
     	        String sql = "SELECT num, bookname, writer, price, series " +
@@ -267,7 +267,7 @@ public class GoodsDAO {
     	        
     	        ResultSet rs = ps.executeQuery();
     	        while (rs.next()) {
-    	            GoodsVO vo = new GoodsVO();
+    	            BooksVO vo = new BooksVO();
     	            vo.setNum(rs.getInt(1));
     	            vo.setBookname(rs.getString(2));
     	            vo.setWriter(rs.getString(3));
