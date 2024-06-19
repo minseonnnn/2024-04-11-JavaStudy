@@ -1,0 +1,195 @@
+package com.sist.client;
+import java.util.*;
+import java.util.List;
+
+import com.sist.dao.*;
+import com.sist.commons.*;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.net.URL;
+
+public class BookFindPanel extends JPanel implements ActionListener, MouseListener {
+	JTable table;
+    DefaultTableModel model;
+    JTextField tf;
+    JButton b,entire,list;
+    BooksDAO dao;
+    ControllPanel cp;
+    TableColumn column;
+    int curpage=1;
+    public BookFindPanel(ControllPanel cp) {
+    	dao=BooksDAO.newInstance();
+        this.cp = cp;
+
+        setLayout(new BorderLayout());
+        tf = new JTextField(35);
+        b = new JButton("검색");
+        entire = new JButton("전체보기");
+        list = new JButton("목록");
+
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        p.setBorder(new EmptyBorder(10, 0, 10, 0));
+        p.add(tf);
+        p.add(b);
+        p.add(entire);
+        p.add(list);
+        add("North", p);
+
+        String[] col = {"번호", "표지", "도서명", "지은이", "가격", "시리즈"};
+        Object[][] row = new Object[0][6];
+
+        model = new DefaultTableModel(row, col) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return getValueAt(0, columnIndex).getClass();
+            }
+        };
+
+        table = new JTable(model);
+        table.setRowHeight(35);
+        table.getTableHeader().setReorderingAllowed(false);
+        table.setShowVerticalLines(false);
+        JScrollPane js = new JScrollPane(table);
+        add("Center", js);
+
+        for (int i = 0; i < col.length; i++) {
+            column = table.getColumnModel().getColumn(i);
+            if (i == 0)
+                column.setPreferredWidth(5);
+            //else if (i == 1)
+                //column.setPreferredWidth(50); // 표지 너비 조정
+            else if (i == 2)
+                column.setPreferredWidth(200); // 도서명 너비 조정
+            else if (i == 3)
+                column.setPreferredWidth(30); // 지은이 너비 조정
+            else if (i == 4)
+                column.setPreferredWidth(20); // 가격 너비 조정
+            else if (i == 5)
+                column.setPreferredWidth(50); // 시리즈 너비 조정
+        }
+
+        tf.addActionListener(this);
+        b.addActionListener(this);
+        entire.addActionListener(this);
+        list.addActionListener(this);
+        table.addMouseListener(this);
+        table.getTableHeader().setBackground(Color.lightGray);
+        
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(list);
+        buttonPanel.add(entire);
+        add("South", buttonPanel); // 목록 버튼 패널을 남쪽에 추가
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+    	// TODO Auto-generated method stub
+    	if(e.getSource()==tf || e.getSource()==b)
+		{
+			String name=tf.getText();
+			if(name.length()<1)
+			{
+				JOptionPane.showMessageDialog(this, "검색어를 입력하세요");
+				tf.requestFocus();
+				return;
+			}
+
+            ArrayList<BooksVO> list = dao.BooksFindData(name);
+            if(list.size()<1)
+			{
+				JOptionPane.showMessageDialog(this, "검색된 결과가 없습니다");
+			}
+            else
+			{
+				for(int i=model.getRowCount()-1;i>=0;i--)
+				{
+					model.removeRow(i);
+				}
+				System.out.println(list.size());
+				for(BooksVO vo:list)
+				{
+					try
+					{
+						//URL url=new URL(vo.getImage());
+						//Image img=ImageChange.getImage(new ImageIcon(url), 35, 35);
+						Object[] obj={
+							vo.getNum(),
+							//new ImageIcon(img),
+							vo.getBookname(),
+							vo.getPrice()
+						};
+						model.addRow(obj);
+					}catch(Exception ex){}
+				}
+			}
+		}
+	
+    
+         else if (e.getSource()==list) 
+        {
+            cp.card.show(cp, "HP"); // 목록 버튼 클릭 시 홈 패널로 화면 전환
+        }
+        /*else if (e.getSource() == entire) {
+            // 전체보기 버튼 클릭 시
+            model.setRowCount(0); // 기존 테이블 데이터 모두 제거
+
+            // 데이터베이스에서 모든 도서 데이터 가져오기
+            ArrayList<BooksVO> list = dao.BooksListData(6); 
+
+            // 가져온 도서 데이터를 테이블 모델에 추가
+            for (BooksVO vo : list) {
+            	Object[] obj = {
+                    vo.getNum(),
+                    vo.getBookname(),
+                    vo.getWriter(),
+                    vo.getPrice() + "원",
+                    vo.getSeries()
+                };
+                model.addRow(obj); // 테이블 모델에 데이터 추가
+            }
+        }*/
+    }
+    @Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==table)
+		{
+			if(e.getClickCount()==2)
+			{
+				int row=table.getSelectedRow();
+				String no=model.getValueAt(row, 0).toString();
+				cp.dp.print(Integer.parseInt(no));
+				cp.card.show(cp, "DP");
+			}
+		}
+	}
+    @Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+    
+}

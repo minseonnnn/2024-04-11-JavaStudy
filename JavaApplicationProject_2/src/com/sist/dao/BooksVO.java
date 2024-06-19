@@ -19,7 +19,7 @@ import lombok.Data;
     detail                                           VARCHAR2(4000)
  */
 @Data
-public class GoodsVO {
+public class BooksVO {
    private int num, page, price;
    private long isbn;
    private String bookname, writer, translator, series, paper, image, detail;
