@@ -14,11 +14,14 @@ public class BooksDetailPanel extends JPanel implements ActionListener, ItemList
     JLabel la1, la2, la3, la4, la5, la6, la7, la8;
     JButton b1, b2;
     JComboBox<Integer> box;
-    JLabel pLa, tLa;
+    JLabel pLa, tLa, noteLa;
     ControllPanel cp; // 화면 이동을 위한 ControllPanel 객체
     BooksDAO dao; // 데이터베이스 접근을 위한 GoodsDAO 객체
-
-    public BooksDetailPanel(ControllPanel cp) {
+    int bnum=0;
+    String myId;
+    public BooksDetailPanel(ControllPanel cp) 
+    {
+    	
         dao=BooksDAO.newInstance(); // GoodsDAO 객체 생성
         this.cp = cp; // ControllPanel 객체 할당
 
@@ -30,55 +33,63 @@ public class BooksDetailPanel extends JPanel implements ActionListener, ItemList
         add(la1);
 
         la2 = new JLabel();
-        la2.setBounds(470, 15, 400, 45);
+        la2.setBounds(470, 15, 440, 110);
+        la2.setFont(new Font("맑은 고딕", Font.BOLD, 30));
         add(la2);
 
         la3 = new JLabel();
-        la3.setBounds(470, 70, 350, 30);
+        la3.setBounds(470, 125, 400, 30);
+        la3.setFont(new Font("맑은 고딕",Font.PLAIN,15));
         add(la3);
 
         la4 = new JLabel();
-        la4.setBounds(470, 110, 350, 30);
+        la4.setBounds(470, 155, 400, 30);
+        la4.setFont(new Font("맑은 고딕",Font.PLAIN,15));
         add(la4);
 
         la5 = new JLabel();
-        la5.setBounds(470, 150, 120, 30);
+        la5.setBounds(470, 190, 200, 30);
+        la5.setFont(new Font("맑은 고딕",Font.PLAIN,15));
         add(la5);
 
         la6 = new JLabel();
-        la6.setBounds(470, 190, 250, 30); 
+        la6.setBounds(470, 225, 400, 30); 
+        la6.setFont(new Font("맑은 고딕",Font.PLAIN,15));
         add(la6);
 
         la7 = new JLabel();
-        la7.setBounds(470, 230, 300, 30); 
+        la7.setBounds(470, 260, 400, 30); 
+        la7.setFont(new Font("맑은 고딕",Font.PLAIN,15));
         add(la7);
 
         la8 = new JLabel();
-        la8.setBounds(470, 270, 250, 30); 
+        la8.setBounds(470, 295, 300, 30); 
+        la8.setFont(new Font("맑은 고딕",Font.PLAIN,15));
         add(la8);
+
+        pLa = new JLabel("수량: ");
+        pLa.setBounds(470, 330, 40, 30);
+        pLa.setFont(new Font("맑은 고딕",Font.PLAIN,15));
+		add(pLa);
 
         // JButton 초기화 및 위치 설정
         b1 = new JButton("장바구니");
-        b1.setBounds(470, 400, 100, 30); 
         b2 = new JButton("목록");
-        b2.setBounds(590, 400, 100, 30); 
-
-        JPanel p = new JPanel();
-        p.add(b1);
-        p.add(b2);
-        p.setBounds(470, 500, 350, 35);
-        add(p);
-
-        // JLabel 초기화 및 위치 설정
-        pLa = new JLabel("가격:");
-        pLa.setBounds(470, 310, 200, 30);
-        add(pLa);
+        JPanel p=new JPanel();
+        b1.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+        b2.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+        b1.setBackground(new Color(255,150,157));
+		b2.setBackground(new Color(156,156,156));
+		b1.setForeground(Color.WHITE);
+		b2.setForeground(Color.WHITE);
+		p.add(b1);p.add(b2);
+		p.setBounds(400, 510, 450, 100);
+		add(p);
 
         tLa = new JLabel("구매 총 가격: ");
-        tLa.setBounds(470, 350, 200, 30);
+        tLa.setBounds(470, 420, 380, 40);
+        tLa.setFont(new Font("맑은 고딕",Font.BOLD,20));
         add(tLa);
-        Font font = new Font("SansSerif", Font.BOLD, 15); 
-        tLa.setFont(font);
 
         // JComboBox 초기화 및 위치 설정
         box = new JComboBox<Integer>();
@@ -89,18 +100,26 @@ public class BooksDetailPanel extends JPanel implements ActionListener, ItemList
         box.addItem(5);
         box.addItem(6);
         box.addItem(7);
-        box.setBounds(470, 270, 200, 30);
+        box.setBounds(530, 330, 100, 30);
         add(box);
+        
+        noteLa = new JLabel("최대 구매 가능 수량은 7개입니다."); 
+		noteLa.setFont(new Font("맑은 고딕",Font.BOLD,13));
+		noteLa.setForeground(Color.red);
+		noteLa.setBounds(470, 370, 200, 30);
+		add(noteLa);
 
         // ActionListener 및 ItemListener 등록
-        b1.addActionListener(this);
         b2.addActionListener(this);
+        b1.addActionListener(this);
         box.addItemListener(this);
     }
 
-    public void print(int no) {
+    public void print(int num) 
+    {
+    	bnum=num;
         // 1. 오라클 데이터베이스에서 데이터를 가져온다
-    	BooksVO vo=dao.BooksDetailData(no);
+    	BooksVO vo=dao.BooksDetailData(num);
 
         // 2. 데이터를 GUI에 표시
         try {
@@ -112,26 +131,25 @@ public class BooksDetailPanel extends JPanel implements ActionListener, ItemList
         }
 
         la2.setText("<html><font size= 5>"+vo.getBookname()+"</font></html>");
-        la3.setText("<html><font color=gray>" +"시리즈명: "+ vo.getSeries() + "</font></html>");
-        la4.setText("지은이: "+ vo.getWriter());
-        la5.setText("가격: "+String.valueOf(vo.getPrice()));
-        la6.setText("페이지 수: " + vo.getPage());
-        la7.setText("출간일: " + vo.getPubdate());
+        la3.setText("지은이: "+ vo.getWriter());
+        la4.setText("옮긴이: "+vo.getTranslator());
+        la5.setText("페이지: "+vo.getPage());
+        la6.setText("가격: "+vo.getPrice()+"원");
+        la7.setText("발행일: "+vo.getPubdate());
+        la8.setText("시리즈: "+vo.getSeries());
 
-        pLa.setText("가격: " + vo.getPrice());
-        tLa.setText("구매 총 가격:" + vo.getPrice());
     }
 
     @Override
     public void itemStateChanged(ItemEvent e) {
         // JComboBox의 선택이 변경될 때 호출되는 메서드
         if (e.getSource() == box) {
-            String price = pLa.getText();
+            String price = la6.getText();
             price = price.substring(price.indexOf(":") + 1);
             price = price.replaceAll("[^0-9]","");
 
-            int account = (int) box.getSelectedItem(); // 선택된 수량
-            int total = Integer.parseInt(price) * account; // 총 구매 가격 계산
+            int account=box.getSelectedIndex()+1; // 선택된 수량
+            int total=Integer.parseInt(price)*account; // 총 구매 가격 계산
 
             DecimalFormat df=new DecimalFormat("##,###,###");
             String s=df.format(total);
@@ -145,5 +163,25 @@ public class BooksDetailPanel extends JPanel implements ActionListener, ItemList
         if (e.getSource()==b2) {
             cp.card.show(cp, "HP"); // 목록 버튼 클릭 시 홈 패널로 화면 전환
         }
+        else if(e.getSource()==b1)
+		{
+			CartVO vo=new CartVO();
+			vo.setBnum(bnum);
+			
+			String id=cp.cMain.myId;
+			
+			vo.setId(id);
+			
+			int account=box.getSelectedIndex()+1;
+			vo.setAccount(account);
+			String price=tLa.getText();
+			price=price.replaceAll("[^0-9]", "");
+			vo.setPrice(Integer.parseInt(price));
+			
+			dao.bookCartInsert(vo);
+			JOptionPane.showMessageDialog(this, "장바구니에 추가되었습니다\n마이페이지에서 확인하세요");
+			// 이동 => 마이페이지 이동 
+			cp.card.show(cp, price);
+		}
     }
 }
