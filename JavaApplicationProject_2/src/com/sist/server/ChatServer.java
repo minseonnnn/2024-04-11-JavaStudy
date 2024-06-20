@@ -2,6 +2,7 @@ package com.sist.server;
 import java.util.*;
 
 import javax.crypto.Cipher;
+import javax.swing.JOptionPane;
 
 import java.io.*;
 import java.lang.module.FindException;
@@ -120,7 +121,7 @@ public class ChatServer implements Runnable{
 						   waitVc.add(this);
 						   
 						   // Login=>Home으로 변경 (창) 
-						   messageTo(Function.MYLOG+"|"+id+"|"+name);
+						   messageTo(Function.MYLOG+"|"+id+"|"+name+"|"+admin);
 						   // 접속자 정보를 전송 
 						   for(Client client:waitVc)
 						   {
@@ -139,7 +140,82 @@ public class ChatServer implements Runnable{
 					   break;
 					   case Function.INFO:
 					   {
-						   
+						   String yid=st.nextToken();
+							MemberVO vo=dao.memberInfo2(yid);
+							messageTo(Function.INFO+"|"
+							          +vo.getName()+"|"
+							          +vo.getSex()+"|"
+							          +vo.getAddr1()+"|"
+							          +vo.getEmail()+"|"
+							          +vo.getPhone()+"|"
+							          +vo.getContent());
+
+					   }
+					   break;
+					   // 상담
+					   case Function.ONEINIT:
+					   {
+						   String adminId=st.nextToken();
+						   String userId=st.nextToken();
+						   for(Client client:waitVc)
+						   {
+							   if(adminId.equals(client.id))
+							   {
+								   client.messageTo(Function.ONEINIT+"|"+userId);
+							   }
+						   }
+					   }
+					   break;
+					   case Function.ONENO:
+					   {
+						   String userId=st.nextToken();
+						   for(Client client:waitVc)
+						   {
+							   if(userId.equals(client.id))
+							   {
+								   client.messageTo(Function.ONENO+"|"+id);
+							   }
+						   }
+					   }
+					   break;
+					   case Function.ONETOONE:
+					   {
+						   String userId=st.nextToken();
+						   String message=st.nextToken();
+						   for(Client client:waitVc)
+						   {
+							   if(userId.equals(client.id))
+							   {
+								   client.messageTo(Function.ONETOONE+"|["+name+"]"+message);// 상담받는 사람
+								   messageTo(Function.ONETOONE+"|["+name+"]"+message);// 상담자
+							   }
+						   }
+					   }
+					   break;
+					   case Function.ONEYES:
+					   {
+							  String userId=st.nextToken();
+							  for(Client client:waitVc)
+							   {
+								   if(userId.equals(client.id))
+								   {
+									   client.messageTo(Function.ONEYES+"|"+id); // 상담 받는 사람
+									   messageTo(Function.ONEYES+"|"+userId);// 상담자
+								   }
+							   }
+					   }
+					   break;
+					   case Function.ONEEXIT:
+					   {
+						   String userId=st.nextToken();
+						   for(Client client:waitVc)
+						   {
+							   if(userId.equals(client.id))
+							   {
+								   client.messageTo(Function.ONEEXIT+"|");// 상담 받는 사람 
+								   messageTo(Function.ONEEXIT+"|");// 상담자 
+							   }
+						   }
 					   }
 					   break;
 					   case Function.EXIT:
@@ -150,7 +226,7 @@ public class ChatServer implements Runnable{
 						   // 실제 나가는 회원 처리 
 						   for(Client client:waitVc)
 						   {
-						    // => Voctor에서 제거 
+							   // => Voctor에서 제거 
 						     if(client.id.equals(id))
 						     {
 						    	waitVc.remove(client);
@@ -159,12 +235,12 @@ public class ChatServer implements Runnable{
 						    	in.close();
 						    	out.close();
 						    	
-						    	break;
 						     }
 						    // => 나가라는 메세지 전송 
 						    // => in/out종료
 						   }
 					   }
+					   break;
 					}
 				}
 			}catch(Exception ex) {}

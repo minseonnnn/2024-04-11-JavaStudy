@@ -29,12 +29,13 @@ public class BookFindPanel extends JPanel implements ActionListener, MouseListen
         b = new JButton("검색");
         entire = new JButton("전체보기");
         list = new JButton("목록");
+        list.setPreferredSize(new Dimension(100, 40)); // 크기를 너비 100, 높이 40으로 설정
 
         JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         p.setBorder(new EmptyBorder(10, 0, 10, 0));
         p.add(tf);
         p.add(b);
-        p.add(entire);
+        //p.add(entire);
         p.add(list);
         add("North", p);
 
@@ -63,17 +64,17 @@ public class BookFindPanel extends JPanel implements ActionListener, MouseListen
         for (int i = 0; i < col.length; i++) {
             column = table.getColumnModel().getColumn(i);
             if (i == 0)
-                column.setPreferredWidth(5);
-            //else if (i == 1)
-                //column.setPreferredWidth(50); // 표지 너비 조정
+                column.setPreferredWidth(10);
+            else if (i == 1)
+                column.setPreferredWidth(80); // 표지 너비 조정
             else if (i == 2)
-                column.setPreferredWidth(200); // 도서명 너비 조정
+                column.setPreferredWidth(300); // 도서명 너비 조정
             else if (i == 3)
-                column.setPreferredWidth(30); // 지은이 너비 조정
+                column.setPreferredWidth(100); // 지은이 너비 조정
             else if (i == 4)
-                column.setPreferredWidth(20); // 가격 너비 조정
+                column.setPreferredWidth(80); // 가격 너비 조정
             else if (i == 5)
-                column.setPreferredWidth(50); // 시리즈 너비 조정
+                column.setPreferredWidth(100); // 시리즈 너비 조정
         }
 
         tf.addActionListener(this);
@@ -83,16 +84,15 @@ public class BookFindPanel extends JPanel implements ActionListener, MouseListen
         table.addMouseListener(this);
         table.getTableHeader().setBackground(Color.lightGray);
         
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // 오른쪽 정렬로 변경
         buttonPanel.add(list);
-        buttonPanel.add(entire);
         add("South", buttonPanel); // 목록 버튼 패널을 남쪽에 추가
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-    	// TODO Auto-generated method stub
-    	if(e.getSource()==tf || e.getSource()==b)
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==tf || e.getSource()==b)
 		{
 			String name=tf.getText();
 			if(name.length()<1)
@@ -101,7 +101,7 @@ public class BookFindPanel extends JPanel implements ActionListener, MouseListen
 				tf.requestFocus();
 				return;
 			}
-
+			// 데이터베이스 연동 
             ArrayList<BooksVO> list = dao.BooksFindData(name);
             if(list.size()<1)
 			{
@@ -118,21 +118,21 @@ public class BookFindPanel extends JPanel implements ActionListener, MouseListen
 				{
 					try
 					{
-						//URL url=new URL(vo.getImage());
-						//Image img=ImageChange.getImage(new ImageIcon(url), 35, 35);
+						URL url=new URL(vo.getImage());
+						Image img=ImageChange.getImage(new ImageIcon(url), 35, 35);
 						Object[] obj={
 							vo.getNum(),
-							//new ImageIcon(img),
+							new ImageIcon(img),
 							vo.getBookname(),
-							vo.getPrice()
+							vo.getWriter(),
+							vo.getPrice() + "원",
+							vo.getSeries()
 						};
 						model.addRow(obj);
 					}catch(Exception ex){}
 				}
 			}
 		}
-	
-    
          else if (e.getSource()==list) 
         {
             cp.card.show(cp, "HP"); // 목록 버튼 클릭 시 홈 패널로 화면 전환
@@ -142,21 +142,30 @@ public class BookFindPanel extends JPanel implements ActionListener, MouseListen
             model.setRowCount(0); // 기존 테이블 데이터 모두 제거
 
             // 데이터베이스에서 모든 도서 데이터 가져오기
-            ArrayList<BooksVO> list = dao.BooksListData(6); 
+            ArrayList<BooksVO> list = dao.BooksAllData(); 
 
             // 가져온 도서 데이터를 테이블 모델에 추가
-            for (BooksVO vo : list) {
-            	Object[] obj = {
-                    vo.getNum(),
-                    vo.getBookname(),
-                    vo.getWriter(),
-                    vo.getPrice() + "원",
-                    vo.getSeries()
-                };
-                model.addRow(obj); // 테이블 모델에 데이터 추가
-            }
+            for(BooksVO vo:list)
+			{
+				try
+				{
+					URL url=new URL(vo.getImage());
+					Image img=ImageChange.getImage(new ImageIcon(url), 35, 35);
+					Object[] obj={
+						vo.getNum(),
+						new ImageIcon(img),
+						vo.getBookname(),
+						vo.getWriter(),
+						vo.getPrice() + "원",
+						vo.getSeries()
+					};
+					model.addRow(obj);
+				}catch(Exception ex){}
+			}
         }*/
     }
+    
+    
     @Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub

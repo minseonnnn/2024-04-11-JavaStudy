@@ -80,7 +80,7 @@ public class BooksDAO {
      // SQL문장 송수신
      private PreparedStatement ps;
      // 오라클 주소 저장 => 변경 (x) => 상수
-     private final String URL="jdbc:oracle:thin:@localhost:1521:XE";
+     private final String URL="jdbc:oracle:thin:@192.168.10.124:1521:XE";
      
      // 싱글턴 => 메모리 누수 현상 방지 => 객체를 한번만 생성 => DAO
      private static BooksDAO dao;
@@ -97,7 +97,7 @@ public class BooksDAO {
      {
     	 try
     	 {
-    		 conn=DriverManager.getConnection(URL,"hr","happy");
+    		 conn=DriverManager.getConnection(URL,"hr2","happy");
     	 }catch(Exception ex) {}
      }
      // 3. 오라클 해제 
@@ -203,6 +203,33 @@ public class BooksDAO {
     	    }
     	    return list;
     	}     // 상세보기 => 한개에 대한 정보 
+     
+     /*public ArrayList<BooksVO> BooksAllData() {
+ 	    ArrayList<BooksVO> list = new ArrayList<>();
+ 	    try {
+ 	        getConnection();
+ 	        String sql = "SELECT num, bookname, image " +
+ 	                     "FROM wiki";
+ 	        ps = conn.prepareStatement(sql);
+ 	        ResultSet rs = ps.executeQuery();
+ 	        while (rs.next()) {
+ 	            BooksVO vo = new BooksVO();
+ 	            vo.setNum(rs.getInt(1));
+ 	            vo.setBookname(rs.getString(2));
+ 	            vo.setImage(rs.getString(3));
+ 	            list.add(vo);
+ 	        }
+ 	        rs.close();
+ 	    } catch (Exception ex) {
+ 	        ex.printStackTrace();
+ 	    } finally {
+ 	        disConnection();
+ 	    }
+ 	    return list;
+ 	    
+   	}*/
+ 	    
+ 	     // 상세보기 => 한개에 대한 정보 
      /*
       *  num                                               NUMBER(38)
          ISBN                                               NUMBER(38)
@@ -258,7 +285,7 @@ public class BooksDAO {
     	    ArrayList<BooksVO> list = new ArrayList<>();
     	    try {
     	        getConnection();
-    	        String sql = "SELECT num, bookname, writer, price, series " +
+    	        String sql = "SELECT num, image, bookname, writer, price, series " +
     	                     "FROM wiki " +
     	                     "WHERE bookname LIKE '%' || ? || '%' " +
     	                     "ORDER BY num ASC";
@@ -269,10 +296,11 @@ public class BooksDAO {
     	        while (rs.next()) {
     	            BooksVO vo = new BooksVO();
     	            vo.setNum(rs.getInt(1));
-    	            vo.setBookname(rs.getString(2));
-    	            vo.setWriter(rs.getString(3));
-    	            vo.setPrice(rs.getInt(4));
-    	            vo.setSeries(rs.getString(5));
+    	            vo.setImage(rs.getString(2));
+    	            vo.setBookname(rs.getString(3));
+    	            vo.setWriter(rs.getString(4));
+    	            vo.setPrice(rs.getInt(5));
+    	            vo.setSeries(rs.getString(6));
     	            list.add(vo);
     	        }
     	        rs.close();
@@ -284,4 +312,128 @@ public class BooksDAO {
     	    return list;
     	}
      // 구매 => INSERT , UPDATE , DELETE 
-}
+     public void bookCartInsert(CartVO vo)
+     {
+    	  try 
+    	  {
+    		  getConnection();
+    		  String sql = "INSERT INTO bookcart(bno, bnum, id, price, account) "
+    				  	  + "VALUES(bookcart_bno_seq.nextval, ?,?,?,?)";
+    		  ps=conn.prepareStatement(sql);
+    		  ps.setInt(1, vo.getBnum());
+    		  ps.setString(2, vo.getId());
+    		  ps.setInt(3, vo.getPrice());
+    		  ps.setInt(4, vo.getAccount());
+    		  
+    		 ps.executeUpdate();
+    		  
+    	  }catch(Exception ex)
+    	  {
+    		  ex.printStackTrace();
+    	  }
+    	  finally
+    	  {
+    		  disConnection();
+    	  }
+     }
+     public void bookCartCancel(int bno)
+     {
+    	  try
+    	  {
+    		  getConnection();
+    		  String sql = "DELETE FROM bookcart "
+    				  		+ "WHERE bno="+bno;
+    		  ps=conn.prepareStatement(sql);
+    		  ps.executeUpdate();
+    		  
+    	  }catch(Exception ex)
+    	  {
+    		  ex.printStackTrace();
+    	  }
+    	  finally
+    	  {
+    		  disConnection();
+    	  }
+     }
+     public List<CartVO> bookCartSelect(String id)
+     {
+    	List<CartVO> list = new ArrayList<CartVO>();  
+    	try
+    	{
+    		getConnection();
+    		String sql = "SELECT bno, bnum, price, account," // 실무에서는 ORDER BY 느려서 잘 안쓰고 INDEX 사용함
+    					+"(SELECT image FROM wiki WHERE num = bookcart.bnum),"
+    					+"(SELECT bookname FROM wiki WHERE num = bookcart.bnum),"
+    					+"(SELECT price FROM wiki WHERE num = bookcart.bnum) "
+    					+"FROM bookcart "
+    					+"WHERE id=?";
+    		ps=conn.prepareStatement(sql);
+    		ps.setString(1, id);
+    		ResultSet rs= ps.executeQuery();
+    		
+    		while(rs.next())
+    		{
+    			CartVO vo = new CartVO();
+    			vo.setBno(rs.getInt(1));
+    			vo.setBnum(rs.getInt(2));
+    			vo.setPrice(rs.getInt(3));
+    			vo.setAccount(rs.getInt(4));
+    			vo.getGvo().setImage(rs.getString(5));
+    			vo.getGvo().setBookname(rs.getString(6));
+    			vo.getGvo().setPrice(rs.getInt(7));
+    			
+    			
+    			list.add(vo);
+    		}
+    		rs.close();
+    					
+    	}catch(Exception ex)
+    	{
+    		ex.printStackTrace();
+    	}
+    	finally
+    	{
+    		disConnection();
+    	}
+    	return list;
+     }
+    	
+     public List<CartVO> bestSeller()
+     {
+    	List<CartVO> list = new ArrayList<CartVO>();  
+    	try
+    	{
+    		getConnection();
+    		String sql =  "SELECT bnum,(SELECT bookname FROM wiki WHERE num = bnum) "
+    				     + "FROM(SELECT bnum "
+    					 + "FROM(SELECT SUM(account), bnum FROM bookcart "
+    					 + "group by bnum ORDER BY SUM(account) DESC))";
+    		
+    		ps=conn.prepareStatement(sql);
+    		ResultSet rs= ps.executeQuery();
+    		
+    		while(rs.next())
+    		{
+    			CartVO vo = new CartVO();
+    			vo.setBnum(rs.getInt(1));
+    			vo.getGvo().setBookname(rs.getString(2));
+    			
+    			list.add(vo);
+    		}
+    		rs.close();
+    					
+    	}catch(Exception ex)
+    	{
+    		ex.printStackTrace();
+    	}
+    	finally
+    	{
+    		disConnection();
+    	}
+    	return list;
+     }
+    	
+    	
+    	
+    	
+    }
