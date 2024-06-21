@@ -95,7 +95,7 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener,R
     	cp.chatP.tf.addActionListener(this);
     	cp.chatP.b1.addActionListener(this);
     	cp.chatP.sendTf.addActionListener(this);
-    	cp.chatP.ob.addActionListener(this);
+    	cp.chatP.table.addMouseListener(this);
     	cp.chatP.b2.addActionListener(this); // 정보보기
     	cp.chatP.ob.addActionListener(this); // 1:1 나가기
 
@@ -141,6 +141,14 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener,R
 		{
 			cp.card.show(cp, "FP");
 		}
+		else if(e.getSource()==cp.chatP.ob)
+	      {
+	         try
+	         {
+	            String youId=cp.chatP.youTf.getText();
+	            out.write((Function.ONEEXIT+"|"+youId+"\n").getBytes());
+	         }catch(Exception ex) {}
+	      }
 		else if(e.getSource()==cp.chatP.tf)
 		{
 			String msg=cp.chatP.tf.getText();
@@ -196,7 +204,7 @@ public class ClientMain extends JFrame implements ActionListener,MouseListener,R
 		else if(e.getSource()==mp.chatBtn)
 		{
 			cp.card.show(cp, "CHAT");
-		}else if(e.getSource()==cp.chatP. tf) {
+		}else if(e.getSource()==cp.chatP.tf) {
 
 			String msg=cp.chatP. tf.getText();
 			if(msg.length()<1) {

@@ -82,7 +82,7 @@ public class BookFindPanel extends JPanel implements ActionListener, MouseListen
         entire.addActionListener(this);
         list.addActionListener(this);
         table.addMouseListener(this);
-        table.getTableHeader().setBackground(Color.lightGray);
+        table.getTableHeader().setBackground(Color.pink);
         
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // 오른쪽 정렬로 변경
         buttonPanel.add(list);

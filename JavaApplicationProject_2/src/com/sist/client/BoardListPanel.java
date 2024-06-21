@@ -1,5 +1,6 @@
 package com.sist.client;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,7 +35,7 @@ public class BoardListPanel extends JPanel implements ActionListener,MouseListen
     	b3=new JButton("다음");
     	pageLa=new JLabel("0 page / 0 pages"); //<label>0 page / 0 pages</label>
     	titleLa=new JLabel("게시판",JLabel.CENTER);// <table>
-    	titleLa.setFont(new Font("맑은 고딕",Font.BOLD,30)); //<h3></h3>
+    	titleLa.setFont(new Font("맑은 고딕",Font.BOLD,25)); //<h3></h3>
     	
     	String[] col={"번호","제목","이름","작성일","조회수"};//<tr><th></th>....</tr>
     	String[][] row=new String[0][5];
@@ -79,26 +80,45 @@ public class BoardListPanel extends JPanel implements ActionListener,MouseListen
     	table.getTableHeader().setReorderingAllowed(false);
     	table.setShowVerticalLines(false);
     	table.setRowHeight(30);
-    	table.getTableHeader().setBackground(Color.lightGray);
-    	
+    	table.getTableHeader().setPreferredSize(new Dimension(table.getTableHeader().getPreferredSize().width, 32));
+		table.getTableHeader().setBackground(Color.pink);
+
     	// 배치 
-    	setLayout(null);
-    	titleLa.setBounds(120, 15, 620, 50);
-    	add(titleLa);
-    	b1.setBounds(120, 70, 100, 30);
-    	add(b1);
-    	js.setBounds(120, 110, 620, 330);
-    	add(js);
+		setLayout(null);
+		titleLa.setBounds(155, 20, 620, 50);
+		add(titleLa);
+		b1.setBounds(750, 500, 70, 25);
+		add(b1);
+		js.setBounds(120, 110, 700, 364);
+		add(js);
     	
     	JPanel p=new JPanel();
     	p.add(b2);
     	p.add(pageLa);
     	p.add(b3);
     	
-    	p.setBounds(120, 450, 620, 35);
+    	p.setBounds(155, 540, 620, 30);
     	add(p);
     	print();
-    	
+
+    	DefaultTableCellRenderer headerRenderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
+    	headerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+    	DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+    	centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+    	DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
+    	leftRenderer.setHorizontalAlignment(JLabel.LEFT);
+
+    	for (int i = 0; i < table.getColumnCount(); i++) {
+    		if (i == 1) { // 제목 열
+    			table.getColumnModel().getColumn(i).setCellRenderer(leftRenderer);
+    		} else {
+    			table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+    		}
+    	}
+
+
     	b1.addActionListener(this);
     	b2.addActionListener(this);
     	b3.addActionListener(this);
