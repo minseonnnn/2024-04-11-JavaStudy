@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  *   7.  5~16까지의 합을 구하시오
  *       ---- for --변수
@@ -29,3 +30,36 @@ public class 문제_7 {
 	
 
 }
+=======
+/*
+ *   7.  5~16까지의 합을 구하시오
+ *       ---- for --변수
+ *       
+ *       for(초기값;조건값;증가식)
+ *       {
+ *           반복 처리
+ *       }
+ *       
+ *       1~100 ==> 좌우대칭 숫자를 추출해서 출력
+ */
+public class 문제_7 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+        int sum=0;
+        for(int i=5;i<=16;i++)
+        {
+        	sum+=i;
+        }
+        System.out.println("결과값:"+sum);		
+        
+        for(int i=1;i<=100;i++)
+        {
+        	if(i%11==0)
+        		System.out.println(i+" ");
+        }
+	}
+	
+
+}
+>>>>>>> 04934d19558c0e09418ecde1327b3ca6bf76c2c1
